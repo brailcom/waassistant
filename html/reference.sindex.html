@@ -1,0 +1,5 @@
+<ul tal:repeat="i request/batch">
+  <li tal:condition="i/enabled">
+    <a tal:omit-tag="not:i/url" tal:attributes="href i/url" tal:content="i/title"/>
+  </li>
+</ul>

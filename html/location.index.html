@@ -1,0 +1,6 @@
+<tal:block tal:repeat="i request/batch">
+  <a tal:attributes="href string:location${i/id}" 
+     tal:content="python:i.title or 'untitled'"/>
+  <p><a tal:attributes="href i/url" tal:content="i/url"/></p>
+  <hr>
+</tal:block>

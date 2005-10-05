@@ -1,0 +1,20 @@
+<table>
+  <tr tal:repeat="i request/batch">
+    <td tal:condition="i/is_edit_ok">
+      <form method="POST" enctype="multipart/form-data" tal:attributes="action string:testset">
+        <div>
+          <input type="hidden" name="@action" value="edit">
+          <input type="hidden" name="@template" value="home">
+          <input type="hidden"
+                 tal:attributes="name string:testset${i/id}@enabled; value python:i.enabled and 'no' or 'yes'">
+          <input type="submit" tal:attributes="value python:i.enabled and 'yes' or 'no'"/>
+        </div>
+      </form>
+    </td>
+    <tal:block tal:condition="not:i/is_edit_ok">
+      <td tal:condition="i/enabled" tal:content="string:yes"/>
+      <td tal:condition="not:i/enabled" tal:content="string:no"/>
+    </tal:block>
+    <td><a tal:attributes="href string:testset${i/id}" tal:content="i/title"/></td>
+  </tr>
+</table>

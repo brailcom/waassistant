@@ -1,0 +1,25 @@
+<tal:block metal:use-macro="templates/page/macros/icing">
+<span metal:fill-slot="title" tal:omit-tag="true">Lost Password</span>
+<span metal:fill-slot="content" tal:omit-tag="true">
+
+  <p>
+    Submit your e-mail address or username to reset your password:
+  </p>
+
+  <form method="POST" tal:attributes="action context/designator">
+    <p>
+      <label>Email Address:<br><input name="address"></label>
+      <input type="hidden" name="@action" value="passrst">
+      <input type="hidden" name="@template" value="forgotten"><br>
+      <label>Username:<br><input name="username"></label>
+      <input type="submit" value="Request password reset">
+    </p>
+  </form>
+
+  <p>
+    A confirmation email will be sent to you &mdash; please follow the
+    instructions within it to complete the reset process.
+  </p>
+
+</span>
+</tal:block>

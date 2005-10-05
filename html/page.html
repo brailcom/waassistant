@@ -1,0 +1,65 @@
+<tal:block metal:define-macro="icing">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>WAssistant -- <span metal:define-slot="title">title</span></title>
+<meta http-equiv="Content-Type" tal:attributes="content string:text/html;; charset=${request/client/charset}">
+</head>
+<body>
+
+<div>
+<map title="Navigation Bar" name="">
+  <p>
+  <!-- Page index -->
+  <tal:block tal:condition="python:request.user.hasPermission ('View', 'checkpoint')">
+    [<a href="home?index=checkpoint">Checkpoints</a>]
+  </tal:block>
+  <tal:block tal:condition="python:request.user.hasPermission ('View', 'task') and utils.supervisors (db._db)">
+    [<a href="home?index=task">Tasks</a>]
+  </tal:block>
+  <tal:block tal:condition="python:db._db.task.list ()">
+    <tal:block tal:condition="python:request.user.hasPermission ('View', 'location')">
+      [<a href="home?index=location">Locations</a>]
+    </tal:block>
+    <tal:block tal:condition="python:request.user.hasPermission ('View', 'testset')">
+      [<a href="home?index=testset">Test Sets</a>]
+    </tal:block>
+    <tal:block tal:condition="python:request.user.hasPermission ('View', 'issue')">
+      [<a href="home?index=issue">Tests&amp;Issues</a>]
+    </tal:block>
+    <tal:block tal:condition="python:request.user.hasPermission ('View', 'report')">
+      [<a href="home?@template=report">Report</a>]
+    </tal:block>
+  </tal:block>
+  [<a href="home?@template=qtest">Quick Test</a>]
+  <tal:block tal:condition="python:request.user.hasPermission ('View', 'user')">
+    [<a href="home?index=user">Users</a>]
+  </tal:block>
+  <!-- Documentation -->
+  [<a href="@@file/doc/index.html">WAassistant Manual</a>]
+  <!-- Log in / log out -->
+  <tal:block tal:condition="python:request.user.username=='anonymous'">
+    [<a href="home">Log In</a>]
+  </tal:block>
+  <tal:block tal:condition="python:request.user.username!='anonymous'">
+    [<a tal:attributes="href python:request.indexargs_url('home', {'@action':'logout'})">Log Out <span tal:replace="request/user/username"/></a>]
+  </tal:block>
+  </p>
+</map>
+</div>
+
+<!-- Action message -->
+<p tal:condition="options/error_message | nothing">
+  <em tal:repeat="m options/error_message" tal:content="structure m"/>
+</p>
+<p tal:condition="options/ok_message | nothing">
+  <em tal:repeat="m options/ok_message" tal:content="structure m"/>
+</p>
+
+<!-- Page contents -->
+<h1><span metal:define-slot="title">title</span></h1>
+<tal:block metal:define-slot="content">Page content goes here</tal:block>
+
+</body>
+</html>
+</tal:block>

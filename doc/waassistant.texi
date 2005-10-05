@@ -1,0 +1,515 @@
+\input texinfo    @c -*-texinfo-*-
+@comment %**start of header
+@setfilename waassistant.info
+@set VERSION 0.1
+@settitle WAassistant @value{VERSION}
+@comment %**end of header
+@copying
+This manual is for WAassistant, @value{VERSION}.
+
+Copyright @copyright{} 2005 Brailcom, o.p.s.
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.2 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts and no Back-Cover Texts.
+A copy of the license is included in the section entitled ``GNU Free
+Documentation License.''
+@end quotation
+
+Alternatively, you can distribute this manual under the same
+conditions as WAassistant itself:
+
+@quotation
+WAassistant is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
+option) any later version.
+
+WAassistant is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+MA 02110-1301 USA.
+@end quotation
+@end copying
+
+@dircategory Accessibility
+@dircategory Web
+@direntry
+* WAassistant: (waassistant).	Web interface Web accessibility.
+@end direntry
+
+@titlepage
+@title WAassistant
+@subtitle for version @value{VERSION}
+@author Milan Zamazal
+@author Brailcom, o.p.s.
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@ifnottex
+@node Top, Introduction, (dir), (dir)
+@top WAassistant
+
+@insertcopying
+@end ifnottex
+
+@menu
+* Introduction::                What is WAassistant?
+* Installation::                How to install it.
+* Testing Web Accessibility::   How to use WAassistant.
+* Customizing WAassistant::     Changing WAassistant look and behavior.
+* Contact Information::         Bug reporting etc.
+* Index::                       Concept, function, variable and key index.
+@end menu
+
+@c ****************************************************************************
+
+@node Introduction, Installation, Top, Top
+@chapter Introduction
+@cindex Roundup
+@cindex WAchecker
+
+WAassistant is a Web application serving for evaluating accessibility
+of Web sites to handicapped users.  It is not just a test result
+reporting tool, it tries to manage the whole testing process,
+including review of automated testing results, testing by humans and
+creating a comprehensive reports on Web sites.
+
+It is implemented on top of @url{???,Roundup}, a flexible issue
+tracking system, and @ref{WAchecker,,,(wachecker)}, a Python library
+performing automated tests of Web accessibility.  It is designed with
+the goal to be free, accessible and to use an extensible tool for
+automated testing.
+
+We believe an advanced free Web accessibility tool is needed to
+increase number and quality of both commercial services and
+non-commercial individual testing helping to make Web accessible to
+handicapped users.  The features declared make WAassistant different
+from currently available tools.  Thus despite WAassistant is currently
+in an early stage of development, it can be very useful in handling
+the task of improving Web accessibility.
+
+@c ****************************************************************************
+
+@node Installation, Testing Web Accessibility, Introduction, Top
+@chapter Installation
+
+You can download WAassistant from @url{???}.  The following pieces of
+software are required to run it:
+
+@table @r
+@item Roundup 0.8
+Roundup is a flexible issue tracking system available at
+@url{http://roundup.sf.net/}.
+
+@item WAchecker 0.1
+WAchecker is a Web accessibility checking library available at
+@url{???}.
+@end table
+
+After installing the required software, unpack the downloaded
+WAassistant tarball and copy it to Roundup trackers directory
+(e.g. @file{/var/lib/roundup/trackers/} on Debian systems).  Then
+follow Roundup tracker installation instructions to install
+WAassistant trackers.
+
+@c ****************************************************************************
+
+@node Testing Web Accessibility, Customizing WAassistant, Installation, Top
+@chapter Testing Web Accessibility
+
+WAassistant is based on the following assumptions about Web testing:
+
+@itemize @bullet
+@item
+Web accessibility is tested by a group of people with different roles.
+
+@item
+There are individual testers who test particular accessibility
+features.  Typically, blind users can test speech output in various
+Web browsers using different assistive technologies.  Those testers
+needn't be skilled in other areas than using the particular end user
+environment.
+
+@item
+There is one or more managers responsible for the testing project and
+its outputs.
+
+@item
+Accessibility testing of the pages should be done with minimizing
+required human work in mind.
+@end itemize
+
+The testing process is driven by a set of @dfn{checkpoints}.  Each of
+the checkpoints represents a particular task which must be done to
+proceed.  The following sections describe the particular tasks and
+stages of the Web accessibility testing process.
+
+@menu
+* Usage Basics::                
+* Creating Users::              
+* Checkpoints::                 
+* Defining Tasks::              
+* Preliminary Report::          
+* Quick Testing::               
+* Testers::                     
+* Final Report::                
+* Sending Messages::            
+@end menu
+
+@node Usage Basics, Creating Users, Testing Web Accessibility, Testing Web Accessibility
+@section Usage Basics
+
+WAassistant is a Web application.  When first accessing WAassistant,
+you are presented with the login page.  Use your login name and
+password to log into the system.  If you don't have an account, ask
+the @samp{admin} user to create one for you.
+
+Whether you log in or not, on top of each page you are presented with
+menu.  Usually, each of the menu pages shows you a list of items
+related to the selected topic.  Each of the items in the list contains
+a link, usually on its title, which points to a detailed view and
+editing form of the particular item.  The detailed view form contains
+both editable and non-editable fields, depending on your access
+rights.  After editing the form, submit your changes with the
+appropriate button.
+
+@node Creating Users, Checkpoints, Usage Basics, Testing Web Accessibility
+@section Creating Users
+
+The first task to perform in new WAassistant tracker is to create
+users.  WAassistant tracker users are classified into several roles,
+each of which has its own view of the tracker and different access
+rights.  The following users roles are defined in WAassistant:
+
+@table @r
+@item Administrator
+This is a power user which can perform any action in the tracker.
+Under normal circumstances, his role should start and end with
+creating and managing the users.
+
+@item Anonymous users
+The system is somewhat open to non-logged users.  They can use some of
+its facilities like Report previews or Quick Testing.  This mode of
+operation is primarily intended for the webmasters of the tested
+pages.  If you need to restrict world-wide access to the tracker, use
+common Web access restriction tools for the purpose.
+
+@item Supervisors
+Supervisors are managers of the project who can do anything in the
+system except for creating and editing other users and making actions
+forbidden by the WAassistant rules (like closing a checkpoint
+dependent on a not-yet-closed checkpoint).
+
+@item Testers
+Testers are users with particular tasks in the testing process.
+Typically they can test particular accessibility features like testing
+the pages in particular browsers, checking speech output produced by
+assistive technologies or checking properties of images.  They have
+view access to most part of the system but only limited editing
+rights.
+@end table
+
+The roles are overlapping in WAassistant.  For instance, Supervisors
+have also all the permissions of Testers and anonymous users.
+
+So in the first step the administrator should log into the system with
+the username @code{admin} and the password chosen during the tracker
+installation and create new users.  At least one Supervisor user must
+be created and then @emph{Create Users} checkpoint can be set as
+@code{done}.
+
+The security mechanism used in WAassistant is the standard Roundup
+one.  If you care about security of your data much, use standard Web
+server security messures to protect and regulate access to the
+tracker.
+
+@node Checkpoints, Defining Tasks, Creating Users, Testing Web Accessibility
+@section Checkpoints
+
+Checkpoints correspond to testing task which must be performed in
+order to proceed with the testing process further.  Some checkpoints
+are defined initially during the tracker setup, other checkpoints can
+be defined later if needed.  There are two important fields in the
+checkpoint editor:
+
+@table @samp
+@item Status
+Each checkpoint status defines progress of the testing process.
+Status change of a checkpoint may imply automatic change of other
+checkpoint statuses and presentation of some pages, especially
+reports.
+
+@item Report
+Contents of the field is used when composing the reports pointed by
+the @samp{Report} menu item.
+@end table
+
+Each checkpoint can have one of the following statuses:
+
+@table @samp
+@item inactive
+This is the initial state of most checkpoints.  It means the
+checkpoint is not currently active and will be handled in future.  You
+cannot activate inactive checkpoints which depend on other checkpoints
+which are @samp{inactive} or @samp{open}.
+
+@item open
+Once checkpoint doesn't depend on any @samp{inactive} or @samp{open}
+checkpoints, it may become @samp{open}.  Open checkpoints are those
+which should be currently worked on.  When the task defined by the
+checkpoint is finished, the checkpoint status must be changed to
+@samp{done}.
+
+@item done
+Status of successfully finished checkpoints.
+
+@item n/a
+This is effectively the same status as @samp{done}.  Its purpose is to
+indicate that the checkpoint task is skippend and isn't going to be
+handled at all for some reason.
+@end table
+
+Information about each checkpoint status change (except for changes
+made by the @samp{admin} users) is sent by e-mail to all Supervisors
+and subscribers of the item (for more information about subscribers
+see @pxref{Sending Messages}).
+
+@node Defining Tasks, Preliminary Report, Checkpoints, Testing Web Accessibility
+@section Defining Tasks, Locations, and Tests
+
+After tracker users are created and the corresponding checkpoint is
+marked as done, @dfn{tasks} must be defined in the @samp{Task} menu.
+For each project at least one task must be defined.  The tasks should
+define overall goals of the particular testing project in a form and
+extent to make the goals sufficiently clear to all the project
+participants.
+
+After at least one task is defined, the project initial phase can be
+completed by defining pages to test and test sets to apply.  This is
+done in the @samp{Locations} and @samp{Test Sets} menu items.  It
+doesn't matter whether you define locations and then test sets or the
+other way round.  Locations and test sets can also be changed any time
+later, though it is better to limit such changes to adding new
+locations if possible.
+
+When enabling test sets, please note that higher WCAG levels include
+the lower levels, so it's sufficient to enable just the highest
+required WCAG level.
+
+@node Preliminary Report, Quick Testing, Defining Tasks, Testing Web Accessibility
+@section Preliminary Report
+
+After both locations and test sets are defined and the corresponding
+checkpoints are marked as done, @dfn{Preliminary Report} starts to be
+created.  It is accessible under the @samp{Report} menu item and
+consists of a list of errors found in the tested pages.
+
+The purpose of making Preliminary Report is to give chance to
+webmaster to fix the most important accessibility errors in their
+pages before human testers start their work.  It makes no sense to
+start thorough testing before trivial easily detected errors are
+fixed.
+
+The work on preliminary report is done in the page referenced by the
+@samp{Tests&Issues} menu item.  The main job here is to classify
+issues.  Each issue can have one of the following classification
+states, represented by the @samp{Status:} form item:
+
+@table @samp
+@item unhandled
+This is the initial issue state.  You must change state of all the
+reported issues to another state before the @emph{Review Issues}
+checkpoint can be marked as done.
+
+@item ok
+Indicates the issue is not an accessibility error and can be
+completely ignored.
+
+@item error
+Indicates the issue is an accessibility error.  Only issues marked as
+errors appear in the report.
+
+@item n/a
+Used when the issue is actually not an issue in the page context.
+Typically used for conditional issues such as @emph{If the object is
+dynamic, ...} when they don't apply (e.g. the object is not dynamic).
+
+@item clone
+Issue is classified and commented completely the same way as the issue
+referenced in the @samp{Clone of issue#:} field.
+@end table
+
+To ease the tedious issue classification work, WAassistant performs
+some form of automated issue cloning and grouping based on the issue
+parameters.  If some issue is cloned while it shouldn't be, just fix
+it in the editing form---any change in issue data breaks its
+@samp{clone} status.
+
+In addition to changing issue states, you can add further explanations
+to @samp{Report:} fields.  You can also add explanations to a whole
+test in the same field of the test editing form.  Contents of both
+issue and test @samp{Report:} fields are present in the assembled
+report.
+
+After all issues are classified, mark the @emph{Review Issues}
+checkpoint as done.  Proceed with @emph{Review Preliminary Report} and
+once you are sure the Preliminary Report is accurate and finished,
+publish it with marking @emph{Publish Preliminary Report} as done.
+
+Webmaster are expected to fix the errors published in Preliminary
+Report before the testing work continues.  Once the fixes are done, a
+Supervisor makes WAassistant to note it by marking the @emph{Resolve
+Issues} checkpoint as done.  Then WAassistant reruns all the automated
+test and generates completely new automatically generated issues.
+
+@node Quick Testing, Testers, Preliminary Report, Testing Web Accessibility
+@section Quick Testing
+
+Sometimes it is useful to make quick automated tests on a single page.
+This can be helpful especially during the @emph{Resolve Issues}
+testing phase or for really quick accessibility tests.  Use the
+@samp{Quick Test} menu item to do it.  Fill in the URL, mark requested
+test sets and press the submit button.  The only special field there
+is @emph{Use page cache}, uncheck it if the tested page was changed
+recently to invalidate its cached version in WAassistant.
+
+Quick testing can be useful if you want to test recent changes to the
+tested pages.  If you want to update report after a particular fix in
+the page, you can request rerunning the corresponding test in its
+editing page.
+
+@node Testers, Final Report, Quick Testing, Testing Web Accessibility
+@section Testers
+
+After the most important accessibility errors are corrected in the
+pages, the pages should be tested not only by automated tests, but
+also by human testers.  Accessibility is a complex issue which can't
+be evaluated and decided without thinking, so human review and
+judgement is always needed.  Of course, human work is more resource
+consuming, but the final result depends on its quality.
+
+WAassistant defines only a few checkpoints related to testing by
+humans.  Depending on your needs and resources, you may want to add
+other checkpoints.  If you know about generally useful accessibility
+checking tasks, please @ref{Contact Information,share them with us} to
+be added in the next version of WAassistant.
+
+Testers are expected to report any problems they encounter by creating
+new issues in the @emph{Issues} page and to comment on related issues
+heavily.  Especially the @samp{Report:} and @samp{Message:} fields in
+issues and tests are to be used.  It is responsibility of Supervisors
+to review all the reported problems and present them properly in Final
+Report.
+
+@node Final Report, Sending Messages, Testers, Testing Web Accessibility
+@section Final Report
+
+Final Report is the final result of a testing project.  It should
+provide detailed description and explanation of identified
+accessibility problems, guidelines how to fix them and references to
+further information.
+
+As for issues, reported by both automated tests and human testers, you
+use the same techniques as in @ref{Preliminary Report}.  But Final
+Report contains additional sections you must provide before it is
+completed:
+
+@itemize
+@item
+In each Final Report you should provide short summary describing the
+overall results of the testing.
+
+@item
+Summarize and describe identified accessibility problems.  This is
+what the @emph{New Problem} link in the Final Report page is for.
+
+@item
+And finally provide recommendations how to cure the problems and how
+to avoid them occuring in future.
+@end itemize
+
+@node Sending Messages,  , Final Report, Testing Web Accessibility
+@section Sending Messages
+
+Some of the WAassistant pages allow you to append messages to items
+and send them to other users.  Look for the fields labeled
+@samp{Message:}.  Each new message is sent to subscribers of the
+related item, which are by default all Supervisors, the creator of the
+item, the user currently responsible for the item, and other users
+mentioned in the @code{Subscribers:} field.
+
+@c ****************************************************************************
+
+@node Customizing WAassistant, Contact Information, Testing Web Accessibility, Top
+@chapter Customizing WAassistant
+
+WAassistant is a regular Roundup application.  Refer to Roundup
+configuration, customization and design documentation to learn how to
+customize Roundup applications including WAassistant.  Up to now,
+there is nothing special in WAassistant necessary to explain here.
+
+Please note WAassistant and WAchecker are just started projects.  We
+hope they help improve accessibility of Web sites to handicapped users
+and users not using a particular browser at particular resolution.  We
+would welcome if WAassistant and WAchecker became growing
+collaborative projects so don't hesitate to contribute your
+improvements and improvement suggestions, see @ref{Contact
+Information}.
+
+@c ****************************************************************************
+
+@node Contact Information, Index, Customizing WAassistant, Top
+@chapter Contact Information
+@cindex authors
+@cindex bugs
+@cindex contact
+
+If you want to report a bug on WAassistant, send complete information
+regarding the bug to the bug tracking address
+@email{waassistant@@bugs.freebsoft.org}.  If you have a patch to
+waassistant, you can send it to the same address.
+
+If you have any questions, suggestions, or anything else to tell us,
+feel free to contact us at the e-mail address
+@email{web-accessibility@@freebsoft.org}.
+
+@c ****************************************************************************
+
+@c @node Copying This Program, Copying This Manual, Contact Information, Top
+@c @appendix GNU General Public License
+
+@c @cindex GPL, GNU General Public License
+@c @center Version 2, June 1991
+
+@c @include gpl.texi
+
+@c ****************************************************************************
+
+@c @node Copying This Manual, Index, Copying This Program, Top
+@c @appendix GNU Free Documentation License
+
+@c @cindex FDL, GNU Free Documentation License
+@c @center Version 1.2, November 2002
+
+@c @include fdl.texi
+
+@c ****************************************************************************
+
+@node Index,  , Contact Information, Top
+@unnumbered Index
+
+@printindex cp
+
+@bye

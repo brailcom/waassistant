@@ -1,0 +1,234 @@
+<tal:block metal:use-macro="templates/page/macros/icing">
+<span metal:fill-slot="title" tal:omit-tag="true">
+  <span tal:replace="python:context._classname.capitalize()"/> Detailed View
+  <span tal:condition="context/is_edit_ok" tal:replace="string:&amp; Editing"/>
+</span>
+<span metal:fill-slot="content" tal:omit-tag="true">
+
+<!-- Form setup -->
+
+<tal:block tal:define="itemkind python:context._classname.capitalize();">
+<form method="POST" enctype="multipart/form-data"
+      tal:attributes="action context/designator">
+<div>
+  <input type="hidden" name="@template" value="item">
+  <!-- Required fields -->
+  <input tal:condition="python:itemkind in ('Checkpoint', 'Task',)"
+         type="hidden" name="@required" value="description">
+  <input tal:condition="python:itemkind in ('Location',)"
+         type="hidden" name="@required" value="url">
+  <input tal:condition="python:itemkind in ('Problem', 'Recommendation', 'Reference',)"
+         type="hidden" name="@required" value="title">
+</div>
+
+<!-- Common fields -->
+
+<p tal:condition="python:itemkind == 'Issue' and context.id" tal:content="string:Issue#${context/id}"/>
+<p>
+  <label tal:omit-tag="not:context/title/is_edit_ok">
+    Title:<br>
+    <strong tal:content="structure context/title/field"/>
+  </label>
+</p>
+<p tal:condition="context/test/is_view_ok | false">
+  <label tal:omit-tag="not:context/test/is_edit_ok">
+    Test:<br>
+    <span tal:replace="structure context/test/menu"/>
+  </label>
+  <input type="hidden" name="active" value="1"/>
+  <a tal:attributes="href string:test${context/test/id}" tal:condition="context/test">view</a>
+</p>
+<p tal:condition="context/kind/is_view_ok | false">
+  <label tal:omit-tag="not:context/kind/is_edit_ok">
+    Classification:<br>
+    <span tal:condition="context/generated" tal:replace="context/kind"/>
+    <span tal:condition="not:context/generated" tal:replace="structure context/kind/menu"/>
+  </label>
+</p>
+<p tal:condition="context/url/is_view_ok | false">
+  <label tal:omit-tag="not:context/url/is_edit_ok">
+    URL:<br>
+    <span tal:condition="context/url/is_edit_ok"
+          tal:replace="structure python:context.url.field(size=60)">URL</span>
+  </label>
+  <a tal:attributes="href context/url" tal:condition="context/url">
+    <tal:block tal:condition="context/url/is_edit_ok">view</tal:block>
+    <tal:block tal:condition="not:context/url/is_edit_ok" tal:replace="context/url"/>
+  </a>
+  <tal:block tal:condition="context/line/is_view_ok | false">
+    <br>
+    <label tal:omit-tag="not:context/line/is_edit_ok">Line: <span tal:replace="structure python:context.line.field(size=4)"/></label>
+    <label tal:omit-tag="not:context/column/is_edit_ok">Column: <span tal:replace="structure python:context.column.field(size=4)"/></label>
+    <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (context.line, context.column, context.url)"
+       tal:condition="context/url">show source</a>
+  </tal:block>
+</p>
+<tal:block tal:condition="context/summary/is_view_ok | false">
+  <p tal:condition="context/summary/is_edit_ok">
+    <label>
+      Summary:<br>
+      <span tal:replace="structure context/summary/multiline"/>
+    </label>
+  </p>
+  <tal:block tal:condition="not:context/summary/is_edit_ok">
+    <p>Summary:</p>
+    <span tal:replace="structure context/summary/multiline"/>    
+  </tal:block>
+</tal:block>
+<tal:block tal:condition="context/description/is_view_ok | false">
+  <p tal:condition="context/description/is_edit_ok">
+    <label>
+      Description:<br>
+      <a tal:condition="python:itemkind == 'Test'" tal:omit-tag="not:context/url"
+         tal:attributes="href context/url" tal:content="context/description"/>
+      <span tal:condition="python:itemkind != 'Test'"
+            tal:replace="structure context/description/multiline"/>
+    </label>
+  </p>
+  <tal:block tal:condition="not:context/description/is_edit_ok">
+    <p>Description:</p>
+    <a tal:condition="python:itemkind == 'Test'" tal:omit-tag="not:context/url"
+       tal:attributes="href context/url" tal:content="context/description"/>
+    <span tal:condition="python:itemkind != 'Test'"
+          tal:replace="structure context/description/multiline"/>
+  </tal:block>
+</tal:block>
+<p tal:condition="context/data/is_view_ok | false">
+  <label tal:omit-tag="not:context/data/is_edit_ok">Additional data:
+    <span tal:replace="structure context/data/field"/>
+  </label>
+</p>
+<tal:block tal:condition="context/impact/is_view_ok | false">
+  <p tal:condition="context/impact/is_edit_ok">
+    <label>
+      Impact:<br>
+      <span tal:replace="structure context/impact/multiline"/>
+    </label>
+  </p>
+  <tal:block tal:condition="not:context/impact/is_edit_ok">
+    <p>Impact:</p>
+    <span tal:replace="structure context/impact/multiline"/>
+  </tal:block>
+</tal:block>
+<tal:block tal:condition="context/cure/is_view_ok | false">
+  <p tal:condition="context/cure/is_edit_ok">
+    <label>
+      Cure:<br>
+      <span tal:replace="structure context/cure/multiline"/>
+    </label>
+  </p>
+  <tal:block tal:condition="not:context/cure/is_edit_ok">
+    <p>Cure:</p>
+    <span tal:replace="structure context/cure/multiline"/>
+  </tal:block>
+</tal:block>
+<p tal:condition="context/status/is_view_ok | false">
+  <label tal:omit-tag="not:context/status/is_edit_ok">
+    Status:<br>
+    <span tal:replace="structure context/status/menu"/>
+  </label>
+</p>
+<p tal:condition="context/cloneof/is_view_ok | false">
+  <label tal:omit-tag="not:context/cloneof/is_edit_ok">
+    Clone of issue#:<br>
+    <span tal:replace="structure context/cloneof/field"/>
+  </label>
+</p>
+<p tal:condition="python:itemkind == 'Checkpoint'">
+  <label tal:omit-tag="not:context/assignedto/is_edit_ok">
+    Assigned to:<br>
+    <span tal:replace="structure context/assignedto/menu"/>
+  </label>
+</p>
+<p tal:condition="context/enabled/is_view_ok | false">
+  <label tal:omit-tag="not:context/enabled/is_edit_ok">
+    Enabled:<br>
+    <span tal:replace="structure context/enabled/field"/>
+  </label>
+</p>
+<tal:block tal:condition="python:itemkind == 'Test'">
+  <hr>
+  <p>Issues:</p>
+  <span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':context.id})"/>
+  <hr>
+</tal:block>
+<tal:block tal:condition="context/report/is_view_ok | false">
+  <p tal:condition="context/report/is_edit_ok">
+    <label>
+      Report:<br>
+      <span tal:replace="structure context/report/multiline"/>
+    </label>
+  </p>
+  <tal:block tal:condition="not:context/report/is_edit_ok">
+    <p>Report:</p>
+    <span tal:replace="structure context/report/multiline"/>
+  </tal:block>
+</tal:block>
+<p tal:condition="context/messages/is_view_ok | false">
+  <label tal:omit-tag="not:context/messages/is_edit_ok">
+    Message:<br>
+    <textarea tal:content="request/form/@note/value | default" name="@note" rows="5" cols="80"/>
+  </label>
+  <br>
+  <label tal:omit-tag="not:context/nosy/is_edit_ok">
+    Subscribers:<br>
+    <span tal:replace="structure context/nosy/field"/>
+  </label>
+</p>
+<p tal:condition="context/rerun/is_edit_ok | false">
+  <label tal:omit-tag="not:context/rerun/is_edit_ok">
+    Rerun test (if yes, all changes to generated issues will be lost!):<br>
+    <span tal:replace="structure context/rerun/field"/>
+  </label>
+</p>
+
+<!-- Submit button -->
+
+<p tal:content="structure context/submit" tal:condition="context/is_edit_ok"/>
+</form>
+
+<!-- Delete button -->
+
+<form method="POST" enctype="multipart/form-data"
+      tal:attributes="action context/designator"
+      tal:condition="python:context.id and context.is_edit_ok () and (itemkind in ('Task', 'Location', 'Problem', 'Recommendation', 'User',) or (itemkind == 'Checkpoint' and str (context.creator) != 'admin') or (itemkind == 'Issue' and not context.generated))">
+  <div>
+    <input type="hidden" name="@action" value="retire">
+    <input type="submit" name="submit" value="Delete Item" tal:condition="context/id">
+  </div>
+</form>
+</tal:block>
+
+<!-- Messages -->
+
+<table class="messages" tal:condition="context/messages | false">
+  <tr><th colspan="4" class="header">Messages</th></tr>
+  <tal:block tal:repeat="msg context/messages/reverse">
+    <tr>
+      <th><a tal:attributes="href string:msg${msg/id}">msg<tal:x replace="msg/id"/> (view)</a></th>
+      <th>Author: <tal:x replace="msg/author"/></th>
+      <th>Date: <tal:x replace="msg/date"/></th>
+      <th>
+        <form tal:condition="context/is_edit_ok" tal:attributes="action string:issue${context/id}">
+          <div>
+            <input type="hidden" name="@remove@messages" tal:attributes="value msg/id">
+            <input type="hidden" name="@action" value="edit">
+            <input type="submit" value="remove" i18n:attributes="value">
+          </div>
+        </form>
+      </th>
+    </tr>
+    <tr>
+      <td colspan="4" class="content">
+        <pre tal:content="structure msg/content/hyperlinked">content</pre>
+      </td>
+    </tr>
+  </tal:block>
+</table>
+
+<!-- History -->
+
+<tal:block tal:condition="python:context.id and request.user.username != 'anonymous'" tal:replace="structure context/history"/>
+
+</span>
+</tal:block>

@@ -1,0 +1,7 @@
+<tal:block tal:repeat="i request/batch">
+  <strong>
+    <a tal:attributes="href string:recommendation${i/id}" 
+       tal:content="python:i.title or 'untitled'"/>
+  </strong>
+  <p tal:content="i/description"/>
+</tal:block>

@@ -1,0 +1,44 @@
+<tal:block metal:use-macro="templates/page/macros/icing">
+<span metal:fill-slot="title" tal:omit-tag="true">
+  <span tal:replace="python:context._classname.capitalize()"/> Editing
+</span>
+<span metal:fill-slot="content" tal:omit-tag="true">
+
+  <form method="POST" enctype="multipart/form-data" tal:attributes="action context/designator">
+    <p>
+    <input type="hidden" name="@template" value="item">
+    <label tal:omit-tag="not:context/realname/is_edit_ok">Name:<br><span tal:replace="structure context/realname/field"/></label><br>
+    <label tal:omit-tag="not:context/username/is_edit_ok">Login name:<br><span tal:replace="structure context/username/field"/></label><br>
+    <tal:block tal:condition="context/is_edit_ok" tal:omit-tag="true">
+      <label>Password:<br><span tal:replace="structure context/password/field"/></label><br>
+      <label>Confirm password:<br><span tal:replace="structure context/password/confirm"/></label><br>
+    </tal:block>
+    <label>Roles<span tal:condition="context/roles/is_edit_ok"
+                      tal:replace="string:(to give the user more than one role, enter a comma,separated,list)"/>:
+      <br>
+      <span tal:condition="context/id" tal:replace="structure context/roles/field"/>
+      <input name="roles" tal:condition="not:context/id" tal:attributes="value db/config/NEW_WEB_USER_ROLES">
+    </label><br>
+    <label tal:omit-tag="not:context/phone/is_edit_ok">Phone:<br><span tal:replace="structure context/phone/field"/></label><br>
+    <label tal:omit-tag="not:context/organisation/is_edit_ok">Organization:<br><span tal:replace="structure context/organisation/field"/></label><br>
+    <label tal:omit-tag="not:context/address/is_edit_ok">E-mail:<br><span tal:replace="structure context/address/field"/></label><br>
+    <label tal:omit-tag="not:context/alternate_addresses/is_edit_ok">Alternate e-mail addresses:<br>
+      <span tal:replace="structure context/alternate_addresses/multiline"/>
+    </label>
+    </p>
+    
+    <p tal:content="structure context/submit" tal:condition="context/is_edit_ok"/>
+  </form>
+
+  <form method="POST" enctype="multipart/form-data" tal:attributes="action context/designator"
+        tal:condition="python:context.id and request.user.username == 'admin'">
+    <div>
+      <input type="hidden" name="@action" value="retire">
+      <input type="submit" name="submit" value="Delete Item">
+    </div>
+  </form>
+
+  <tal:block tal:condition="python:context.id and context.is_edit_ok ()" tal:replace="structure context/history"/>
+
+</span>
+</tal:block>

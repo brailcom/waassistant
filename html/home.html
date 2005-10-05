@@ -1,0 +1,65 @@
+<tal:block metal:use-macro="templates/page/macros/icing">
+  <tal:block metal:fill-slot="title" tal:omit-tag="true">
+    <span tal:define="itemkind request/form/index/value | string:welcome;" tal:omit-tag="true">
+      <span tal:condition="python:itemkind == 'welcome'" tal:omit-tag="true">
+        <span tal:condition="python:request.user.username == 'anonymous'" tal:replace="string:Log In"/>
+        <span tal:condition="python:request.user.username != 'anonymous'" tal:replace="string:Checkpoints"/>
+      </span>
+      <span tal:condition="python:itemkind != 'welcome'" tal:replace="python:itemkind.capitalize () + 's'"/>
+    </span>
+  </tal:block>
+  <tal:block metal:fill-slot="content" tal:omit-tag="true">
+    <tal:block tal:define="itemkind request/form/index/value | string:welcome">
+
+      <!-- Welcome page -->
+      <tal:block tal:condition="python:itemkind == 'welcome' and request.user.username == 'anonymous'">
+        <p>
+          Welcome in WAassistant!
+        </p>
+        <p>
+          If you are a registered user, please log in.  Otherwise you may
+          contact the WAassistant administrator to create a WAassistant account
+          for you or you may continue by selecting one of the menu links above.
+        </p>
+        <form method="POST" tal:attributes="action request/base">
+          <p>
+            <label>Username:<br><input size="10" name="__login_name"></label><br>
+            <label>Password:<br><input size="10" type="password" name="__login_password"></label><br>
+            <input type="hidden" name="@action" value="Login">
+          </p>
+          <p>
+            <input type="submit" value="Login"><br>
+            <span tal:replace="structure request/indexargs_form" />
+          </p>
+          <p>
+            <a href="user?@template=forgotten">Lost&nbsp;your&nbsp;login?</a><br>
+          </p>
+        </form>
+      </tal:block>
+
+      <!-- Standard page -->
+      <tal:block tal:condition="python:itemkind != 'welcome' or request.user.username != 'anonymous'">
+        <tal:block tal:define="itemkind request/form/index/value | string:checkpoint">
+          <em tal:condition="python:request.user.username == 'admin' and itemkind != 'user'">
+            Don't edit these items as admin unless you have good reasons to do so.
+            Prefer making changes as a regular user.
+          </em>
+          <tal:block tal:condition="python:itemkind != 'source'"
+                     tal:replace="structure python:getattr (db, itemkind).renderWith ('indexhelp')"/>
+          <p tal:condition="python:itemkind not in ('testset', 'source',)">
+            <a tal:attributes="href python:itemkind+'?@template=item';"
+               tal:condition="python:request.user.hasPermission ('Create', itemkind)">[New <span tal:replace="python:itemkind.capitalize()"/>]</a>
+          </p>
+
+          <hr>
+          <span tal:condition="python:itemkind not in ('issue', 'source',)"
+                tal:replace="structure python:getattr(db,itemkind).renderWith('index')"/>
+          <span tal:condition="python:itemkind == 'issue'"
+                tal:replace="structure python:db.test.renderWith('index', sort=('+', 'title',), pagesize=1000)"/>
+          <span tal:condition="python:itemkind == 'source'"
+                tal:replace="structure python:utils.showsource (request.form.getfirst('url'), request.form.getfirst('line'), request.form.getfirst('column'))"/>
+        </tal:block>
+      </tal:block>
+    </tal:block>
+  </tal:block>
+</tal:block>

@@ -1,0 +1,7 @@
+<p>
+  Checkpoints control work on the project.  When you finish work on a
+  particular task, set its status to `done' and the checkpoint list gets
+  updated, thus guiding you to your next task.
+</p>
+
+<tal:block tal:replace="structure python:db.checkpoint.renderWith ('_indexhelp')"/>

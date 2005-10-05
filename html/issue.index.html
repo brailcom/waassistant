@@ -1,0 +1,34 @@
+<tal:block tal:repeat="i request/batch">
+  <p tal:condition="python:i.active and not i.cloneof">
+    <span tal:replace="string:Issue#${i/id}:"/>
+    <a tal:attributes="href string:issue${i/id}" tal:content="python:i.title or (i.generated and '(automatically generated)') or '(untitled)'"/>
+    <br>
+    <strong tal:content="i/status" tal:omit-tag="python:str (i.status) != 'unhandled'"/>
+    <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (i.line, i.column, i.url)"
+       tal:content="python:str(i.line)+':'+str(i.column)"/>
+    <a tal:attributes="href i/url" tal:content="i/url"/>
+    <br>
+    <span tal:replace="i/description"/><span tal:condition="i/data">:</span>
+    <em tal:content="i/data"/>
+    <tal:block tal:condition="i/report">
+      <br>
+      <em>Commentary:</em> <span tal:replace="structure i/report"/>
+    </tal:block>
+    <tal:block tal:define="related python:[db.issue.getItem (j) for j in db._db.issue.filter (None, {'cloneof': i.id})]">
+      <tal:block tal:condition="python:related">
+        <br>
+        <em>Related issues:</em><br>
+        <tal:block tal:repeat="j related">
+          <span tal:replace="string:Issue#${j/id}"/>
+          <a tal:attributes="href string:issue${j/id}"
+             tal:content="python:i.title or (i.generated and '(automatically generated)') or '(untitled)'"/>
+          <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (j.line, j.column, j.url)"
+             tal:content="python:str(j.line)+':'+str(j.column)"/>
+          <a tal:attributes="href j/url" tal:content="j/url"/>
+          <em tal:content="j/data"/>
+          <br>
+        </tal:block>
+      </tal:block>
+    </tal:block>
+  </p>
+</tal:block>

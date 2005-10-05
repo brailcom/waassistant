@@ -1,0 +1,54 @@
+<h2>Active Tasks</h2>
+
+<h3>Your Tasks</h3>
+<tal:block tal:repeat="i request/batch">
+  <tal:block tal:condition="python:str (i.status) not in ('inactive', 'done',) and i.is_edit_ok () and (request.user.username != 'admin' or str (i.assignedto) == 'admin')">
+    <p>
+      <a tal:attributes="href string:checkpoint${i/id}"
+         tal:content="python:i.title or 'untitled'"/>
+      &mdash; <span tal:content="i/status"/>
+    </p>
+    <p tal:content="i/description"/>
+    <hr>
+  </tal:block>
+</tal:block>
+
+<h3>Other Tasks</h3>
+<hr>
+<tal:block tal:repeat="i request/batch">
+  <tal:block tal:condition="python:str (i.status) not in ('inactive', 'done',) and (not i.is_edit_ok () or (request.user.username == 'admin' and str (i.assignedto) != 'admin'))">
+    <p>
+      <a tal:attributes="href string:checkpoint${i/id}" 
+         tal:content="python:i.title or 'untitled'"/>
+      &mdash; <span tal:content="i/status"/>
+    </p>
+    <p tal:content="i/description"/>
+    <hr>
+  </tal:block>
+</tal:block>
+
+<h2>Future Tasks</h2>
+<hr>
+<tal:block tal:repeat="i request/batch">
+  <tal:block tal:condition="python:str (i.status) == 'inactive'">
+    <p>
+      <a tal:attributes="href string:checkpoint${i/id}"
+         tal:content="python:i.title or 'untitled'"/>
+    </p>
+    <p tal:content="i/description"/>
+    <hr>
+  </tal:block>
+</tal:block>
+
+<h2>Completed Tasks</h2>
+<hr>
+<tal:block tal:repeat="i request/batch">
+  <tal:block tal:condition="python:str (i.status) == 'done'">
+    <p>
+      <a tal:attributes="href string:checkpoint${i/id}" 
+         tal:content="python:i.title or 'untitled'"/>
+    </p>
+    <p tal:content="i/description"/>
+    <hr>
+  </tal:block>
+</tal:block>

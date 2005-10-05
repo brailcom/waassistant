@@ -1,0 +1,30 @@
+<tal:block metal:use-macro="templates/page/macros/icing">
+  <span metal:fill-slot="title" tal:omit-tag="true">Quick Test</span>
+  <span metal:fill-slot="content" tal:omit-tag="true">
+    <p>
+      You can perform quick accessibility test for any page here without
+      storing any of the results.  Just fill in some URL below, check the
+      required test sets and press the submit button.  If the <em>use page
+        cache</em> option is checked, page cache is used if available,
+      otherwise the URL and links in its page are newly retrieved.
+    </p>
+    <form action="home" method="post">
+      <p>
+        <input name="@template" value="qresult" type="hidden">
+        <label>URL:<br><input name="location" type="text" size="40"></label>
+      </p>
+      <p>
+        <tal:block tal:repeat="i db/testset/list">
+          <label><input tal:attributes="name string:testset${i/id}" type="checkbox"> <span tal:replace="i/title"/></label><br>
+        </tal:block>
+      </p>
+      <p>
+        <label><input name="cache" type="checkbox" checked="checked"> Use page cache</label>
+      </p>
+      <p>
+        <input name="submit" value="Run Quick Test" type="submit">
+      </p>
+    </form>
+  </span>
+</tal:block>
+

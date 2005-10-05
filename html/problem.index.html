@@ -1,0 +1,18 @@
+<hr>
+<tal:block tal:repeat="i request/batch">
+  <p>
+    <a tal:attributes="name string:problem${i/id}"/>
+    <strong>
+      <a tal:attributes="href string:problem${i/id}" 
+         tal:content="python:i.title or 'untitled'"/>
+    </strong>
+  </p>
+  <p tal:content="i/description"/>
+  <p tal:condition="i/impact">
+    <em>Impact:</em> <tal:block tal:replace="i/impact"/>
+  </p>
+  <p tal:condition="i/cure">
+    <em>Cure:</em> <tal:block tal:replace="i/cure"/>
+  </p>
+  <hr>
+</tal:block>

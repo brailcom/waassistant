@@ -1,0 +1,5 @@
+<tal:block tal:repeat="i request/batch">
+  <a tal:attributes="href string:user${i/id}" tal:content="i/username"/>
+  <span tal:condition="i/realname" tal:replace="string:(${i/realname})"/>
+  <hr>
+</tal:block>

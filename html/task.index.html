@@ -1,0 +1,6 @@
+<tal:block tal:repeat="i request/batch">
+  <a tal:attributes="href string:task${i/id}" 
+     tal:content="python:i.title or 'untitled'"/>
+  <p tal:content="i/description"/>
+  <hr>
+</tal:block>

@@ -1,0 +1,5 @@
+<p>
+  This page contains list of users who have access to the project.
+</p>
+
+<tal:block tal:replace="structure python:db.user.renderWith ('_indexhelp')"/>

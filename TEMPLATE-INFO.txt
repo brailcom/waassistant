@@ -1,0 +1,4 @@
+Name: waassistant
+Description: User interface for testing and evaluation of accessibility of web
+             pages.
+Intended-For: Web accessibility testers

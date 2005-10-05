@@ -1,0 +1,29 @@
+<!-- Display issues without a test -->
+<span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':None})"/>
+<hr>
+<!-- Some Python programming in XML :-( -->
+<tal:block tal:define="active_testsets python:[id for id in db._db.testset.list () if db._db.testset.get (id, 'enabled')]">
+  <tal:block tal:define="active_tests python:reduce (lambda x,y: x+y, [db._db.testset.get (id, 'tests') for id in active_testsets], [])">
+    <!-- Test list -->
+    <tal:block tal:repeat="t request/batch">
+      <tal:block tal:condition="python:not t.aliasof and t.id in active_tests">
+        <p>
+          <a tal:attributes="href string:test${t/id}" tal:content="python:t.title or 'none'"/>
+          <tal:block tal:condition="t/description">
+            <br>
+            <a tal:omit-tag="not:t/url" tal:attributes="href t/url" tal:condition="t/description">
+              <em tal:content="t/description"/>
+            </a>
+          </tal:block>
+          <tal:block tal:condition="t/report">
+            <br>
+            <em>Commentary:</em> <span tal:replace="structure t/report"/>
+          </tal:block>
+        </p>
+        <!-- Issue list -->
+        <span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':t.id})"/>
+        <hr>
+      </tal:block>
+    </tal:block>
+  </tal:block>
+</tal:block>

@@ -1,0 +1,97 @@
+<tal:block metal:use-macro="templates/page/macros/icing">
+  <span metal:fill-slot="title" tal:omit-tag="true">
+    <tal:block tal:define="stage2 python:db._db.checkpoint.filter (None, {'title': 'Resolve Issues', 'status': '2'})">
+      <span tal:condition="stage2" tal:replace="string:Final"/>
+      <span tal:condition="not:stage2" tal:replace="string:Preliminary"/>
+      Report
+    </tal:block>
+  </span>
+  <span metal:fill-slot="content" tal:omit-tag="true">
+    <tal:block tal:define="stage2 python:db._db.checkpoint.filter (None, {'title': 'Resolve Issues', 'status': '2'})">
+      
+      <!-- Preliminary report -->
+      <tal:block tal:condition="not:stage2">
+        <tal:block tal:condition="python:not db._db.checkpoint.filter (None, {'title': 'Publish Preliminary Report', 'status': '2'})">
+          <p>
+            <em tal:condition="python:request.user.username == 'admin'">
+              Don't edit these items as admin unless you have good reasons to do so.
+              Prefer making changes as a regular user.
+            </em>
+          </p>
+          <em>Warning: Preliminary Report not yet finished.</em>
+          <tal:block tal:replace="structure python:db.report.renderWith ('indexhelp')"/>
+        </tal:block>
+
+        <h2>Summary of Identified Problems</h2>
+      
+        <tal:block tal:replace="structure python:db.test.renderWith ('sindex', sort=('+', 'title',), pagesize=1000)"/>
+      </tal:block>
+
+      <!-- Final report -->
+      <tal:block tal:condition="stage2">
+        <tal:block tal:condition="python:not db._db.checkpoint.filter (None, {'title': 'Publish Final Report', 'status': '2'})">
+          <p>
+            <em tal:condition="python:request.user.username == 'admin'">
+              Don't edit these items as admin unless you have good reasons to do so.
+              Prefer making changes as a regular user.
+            </em>
+          </p>
+          <p><em>Warning: Final Report not yet finished.</em></p>
+          <tal:block tal:replace="structure python:db.report.renderWith ('indexhelp')"/>
+        </tal:block>
+
+        <h2><a tal:attributes="href string:report1" tal:omit-tag="not:db/report/is_edit_ok">Summary</a></h2>
+
+        <p tal:content="structure python:db._db.report.get ('1', 'description')"/>
+
+        <tal:block tal:condition="python:[id for id in db._db.testset.list () if db._db.testset.get (id, 'report')]">
+          <h2>Commentaries to Applied Test Sets</h2>
+
+          <tal:block tal:repeat="i db/testset/list">
+            <tal:block tal:condition="i/report">
+              <h3 tal:content="i/title"/>
+              <p tal:content="i/report"/>
+            </tal:block>
+          </tal:block>
+        </tal:block>
+        
+        <h2>Identified Problems</h2>
+
+        <p>
+          <a tal:attributes="href string:problem?@template=item"
+             tal:condition="python:request.user.hasPermission ('Create', 'problem')">[New Problem]</a>
+        </p>
+
+        <h3>Overview of Identified Problems</h3>
+        
+        <tal:block tal:replace="structure python:db.problem.renderWith ('sindex')"/>
+
+        <h3>Description of Identified Problems</h3>
+        
+        <tal:block tal:replace="structure python:db.problem.renderWith ('index')"/>
+
+        <h2>Recommendations</h2>
+
+        <p tal:condition="python:request.user.hasPermission ('Create', 'recommendation')">
+          <a tal:attributes="href string:recommendation?@template=item">[New Recommendation]</a>
+        </p>
+
+        <tal:block tal:replace="structure python:db.recommendation.renderWith ('index')"/>
+
+        <h2>Appendix</h2>
+
+        <h3>List of Issues</h3>
+
+        <tal:block tal:replace="structure python:db.test.renderWith ('sindex', sort=('+', 'title',), pagesize=1000)"/>
+        
+        <h3>References</h3>
+
+        <a tal:attributes="href string:home?index=reference" tal:condition="db/reference/is_edit_ok">[Edit]</a>
+
+        <tal:block tal:replace="structure python:db.reference.renderWith ('sindex', sort=('+', 'order',))"/>
+        
+      </tal:block>
+    </tal:block>
+  </span>
+</tal:block>
+
