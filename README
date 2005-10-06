@@ -1,0 +1,35 @@
+WAassistant
+===========
+
+WAassistant is a Web application serving for evaluating accessibility of Web
+sites to handicapped users.  It is not just a test result reporting tool, it
+tries to manage the whole testing process, including review of automated
+testing results and testing by humans and making comprehensive reports on
+accessibility properties of Web sites.
+
+WAchecker is implemented on top of Roundup issue tracking system and WAchecker
+accessibility testing library.
+
+
+* Installation
+
+The following pieces of software are required to run WAassistant:
+
+- Roundup 0.8: A flexible issue tracking system available at
+  http://roundup.sf.net .
+
+- WAchecker 0.1: A Web accessibility checking library available at
+  http://www.freebsoft.org/wahelper .
+
+After installing the required software, unpack the downloaded WAassistant
+tarball and copy it to the Roundup trackers directory
+(e.g. /var/lib/roundup/trackers/ on Debian systems).  Then follow Roundup
+tracker installation instructions to install WAassistant trackers.
+
+
+* Documentation
+
+You can find further information about WAassistant in its manual.  WAassistant
+manual is in the doc/ subdirectory.  You can build its Info, PDF and HTML
+versions by running `make info', `make pdf' and `make html' commands
+respectively in the doc/ subdirectory.
