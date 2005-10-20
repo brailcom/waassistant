@@ -24,7 +24,7 @@
 user = db.getclass ('user')
 user.create (username='admin', password=adminpw,
              address=admin_email, roles='Admin')
-user.create (username='anonymous', roles='User')
+user.create (username='anonymous', roles='Anonymous')
 
 # Issue statuses and kinds
 istatus = db.getclass ('istatus')
@@ -108,11 +108,12 @@ for name, class_ in wachecker.test.all_tests ():
     test.create (title=class_.name (), klass=name, description=class_.description (), url=url, aliasof=aliasof)
 # Test sets
 testset = db.getclass ('testset')
+testsetx = db.getclass ('testsetx')
 for name, class_ in wachecker.test.all_test_sets ():
     testset.create (title=class_.name (), description=class_.description (),
                     klass=name, tests=[t.__name__ for t in class_.tests ()],
                     enabled=False)
-
+    testsetx.create (title=class_.name (), klass=name)
 # Report
 report = db.getclass ('report')
 report.create (title='Summary')

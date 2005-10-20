@@ -14,8 +14,8 @@
         <label>URL:<br><input name="location" type="text" size="40"></label>
       </p>
       <p>
-        <tal:block tal:repeat="i db/testset/list">
-          <label><input tal:attributes="name string:testset${i/id}" type="checkbox"> <span tal:replace="i/title"/></label><br>
+        <tal:block tal:repeat="i db/testsetx/list">
+          <label><input tal:attributes="name string:testsetx${i/id}" type="checkbox"> <span tal:replace="i/title"/></label><br>
         </tal:block>
       </p>
       <p>

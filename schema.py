@@ -70,6 +70,16 @@ testset = Class (db, 'testset',
                  report=String (),
                  )
 testset.setkey ('title')
+# Testsets for anonymous users
+# This class contains duplicate data of `testset' which is very stupid, but
+# this is the simplest way to regulate access rights to testsets.  (Roundup
+# apparently does not allow selective access to different columns for different
+# user groups.)
+testsetx = Class (db, 'testsetx',
+                  title=String (),
+                  klass=String (),
+                  )
+testsetx.setkey ('title')
 
 # IssueClass related entities
 file = FileClass (db, 'file',
@@ -171,21 +181,24 @@ user.setkey ('username')
 # - Admin: administrator of the system and users
 # - Supervisor: may do anything in the system except for managing users
 # - Tester: may edit issues, write messages
-# - User: anonymous user or customer, read-only access
+# - User: webmaster or customer, read-only access
+# - Anonymous: non-logged user, read-only access to public information
 db.security.addRole (name='Supervisor', description="Managing projects")
 db.security.addRole (name='Tester', description="Accessibility testing")
 
 ## Permissions
-for role in 'Admin', 'Supervisor', 'Tester', 'User',:
+for role in 'Admin', 'Supervisor', 'Tester', 'User', 'Anonymous',:
     db.security.addPermissionToRole (role, 'Web Access')
     db.security.addPermissionToRole (role, 'Email Access')
 # common classes -- view
-for c in 'location', 'issue', 'testset', 'test', 'istatus', 'cstatus', 'report', 'reference', 'problem', 'recommendation',:
+for c in 'location', 'issue', 'test', 'testset', 'istatus', 'cstatus', 'report', 'reference', 'problem', 'recommendation',:
     for role in 'Admin', 'Supervisor', 'Tester', 'User',:
         db.security.addPermissionToRole (role, 'View', c)
 for c in 'task', 'file', 'checkpoint', 'msg', 'user',:
     for role in 'Admin', 'Supervisor', 'Tester',:
         db.security.addPermissionToRole (role, 'View', c)
+for role in 'Admin', 'Supervisor', 'Tester', 'User', 'Anonymous',:
+    db.security.addPermissionToRole (role, 'View', 'testsetx')
 # common classes -- edit
 for c in 'task', 'location', 'file', 'msg', 'issue', 'reference', 'problem', 'recommendation',:
     for role in 'Admin', 'Supervisor',:

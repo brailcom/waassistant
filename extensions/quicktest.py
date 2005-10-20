@@ -55,7 +55,7 @@ def quicktest (db, form):
     if url is None:
         raise Exception ('No URL given')
     testset_ids = []
-    prefix = 'testset'
+    prefix = 'testsetx'
     prefixlen = len (prefix)
     for k in form.keys ():
         if k[:prefixlen] == prefix:
@@ -64,7 +64,7 @@ def quicktest (db, form):
     # Create WAchecker instances
     location = wachecker.location.Location (url, refresh_cache=(not cache))
     tests = []
-    for testset in [db.testset.get (id, 'klass') for id in testset_ids]:
+    for testset in [db.testsetx.get (id, 'klass') for id in testset_ids]:
         for t in [t for t in getattr (wachecker.test, testset).tests ()]:
             if t not in tests:
                 tests.append (t)
