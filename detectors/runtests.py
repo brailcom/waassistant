@@ -83,11 +83,11 @@ def _run_test (db, url, test, refresh=False):
                          data=data,
                          kind=kind,
                          url=url,
-                         line=line,
-                         column=column,
                          test=test,
                          status='unhandled',
                          active=True,
+                         line=str (line),
+                         column=str (column),
                          generated=True)
 
 def _rerun_tests (db, tests=None):

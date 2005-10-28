@@ -25,9 +25,9 @@ _nested = False
 def audit_issue_fields (db, c, nodeid, newvalues):
     for i in 'line', 'column',:
         if newvalues.has_key (i):
-            newvalues[i] = int (newvalues[i] or '0')
+            newvalues[i] = newvalues[i] or '0'
         elif not nodeid:
-            newvalues[i] = 0
+            newvalues[i] = '0'
     if ((newvalues.has_key ('status') and not newvalues['status']) or
         (not nodeid and not newvalues.has_key ('status'))):
         newvalues['status'] = '1'
