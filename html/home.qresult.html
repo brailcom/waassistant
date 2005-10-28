@@ -14,9 +14,9 @@
       <!-- Issue list -->
       <p tal:repeat="i t/issues">
         <span tal:replace="i/kind"/>
-        <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (i.line, i.column, t.url)"
+        <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (i.line, i.column, request.form.getfirst ('location'))"
            tal:content="python:str(i.line)+':'+str(i.column)"/>
-        <a tal:attributes="href request/form/location"
+        <a tal:attributes="href python:request.form.getfirst ('location')"
            tal:content="python:request.form.getfirst ('location')"/>
         <br>
         <span tal:replace="i/description"/><span tal:condition="i/data">:</span>
