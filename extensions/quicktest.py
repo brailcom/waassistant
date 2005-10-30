@@ -49,11 +49,16 @@ class _Issue (object):
             self.line = self.column = 0
         self.kind = issue.classification ()
 
-def quicktest (db, form):
+class _Exception (Exception):
+    pass
+
+def _quicktest (db, form):
     # Retrieve form data
     url = form.getfirst ('location')
     if url is None:
-        raise Exception ('No URL given')
+        raise _Exception ('No URL given')
+    if url[:len ('http://')] != 'http://' and url[:len ('https://')] != 'https://':
+        raise _Exception ('URL does not start with http:// nor https://')
     testset_ids = []
     prefix = 'testsetx'
     prefixlen = len (prefix)
@@ -77,7 +82,7 @@ def quicktest (db, form):
         try:
             issues = [_Issue (i) for i in t ().run (location)]
         except wachecker.exception.System_Error, e:
-            raise Exception ("System error: %s: %s" % (e.message (), str (e.exception ()),))
+            raise _Exception ("System error: %s: %s" % (e.message (), str (e.exception ()),))
         # Process issues
         def sortfunc (issue1, issue2):
             return (cmp (issue1.description, issue2.description) or
@@ -87,6 +92,14 @@ def quicktest (db, form):
         test_issues.append (_Test (t, issues))
     # Return the resulting data structures
     return test_issues
+
+def quicktest (db, form):
+    try:
+        return _quicktest (db, form)
+    except _Exception, e:
+        return 'Error: %s' % (e.args[0],)
+    except Exception, e:
+        return 'Error: %s' % (e.args,)
 
 def init (instance):
     instance.registerUtil ('quicktest', quicktest)

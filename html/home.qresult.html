@@ -2,28 +2,31 @@
   <span metal:fill-slot="title" tal:omit-tag="true">Quick Test Results</span>
   <span metal:fill-slot="content" tal:omit-tag="true">
     <hr>
-    <tal:block tal:repeat="t python:utils.quicktest (db._db, request.form)">
-      <!-- Test heading -->
-      <p>
-        <strong><a tal:omit-tag="not:t/url" tal:attributes="href t/url" tal:content="t/title"/></strong>
-        <tal:block tal:condition="t/description">
+    <tal:block tal:define="tests python:utils.quicktest (db._db, request.form)">
+      <tal:block tal:condition="python:type (tests) == type ([])" tal:repeat="t tests">
+        <!-- Test heading -->
+        <p>
+          <strong><a tal:omit-tag="not:t/url" tal:attributes="href t/url" tal:content="t/title"/></strong>
+          <tal:block tal:condition="t/description">
+            <br>
+            <em tal:content="t/description"/>
+          </tal:block>
+        </p>
+        <!-- Issue list -->
+        <p tal:repeat="i t/issues">
+          <span tal:replace="i/kind"/>
+          <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (i.line, i.column, request.form.getfirst ('location'))"
+             tal:content="python:str(i.line)+':'+str(i.column)"/>
+          <a tal:attributes="href python:request.form.getfirst ('location')"
+             tal:content="python:request.form.getfirst ('location')"/>
           <br>
-          <em tal:content="t/description"/>
-        </tal:block>
-      </p>
-      <!-- Issue list -->
-      <p tal:repeat="i t/issues">
-        <span tal:replace="i/kind"/>
-        <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (i.line, i.column, request.form.getfirst ('location'))"
-           tal:content="python:str(i.line)+':'+str(i.column)"/>
-        <a tal:attributes="href python:request.form.getfirst ('location')"
-           tal:content="python:request.form.getfirst ('location')"/>
-        <br>
-        <span tal:replace="i/description"/><span tal:condition="i/data">:</span>
-        <em tal:content="i/data"/>
-        <br>
-      </p>
-      <hr>
+          <span tal:replace="i/description"/><span tal:condition="i/data">:</span>
+          <em tal:content="i/data"/>
+          <br>
+        </p>
+        <hr>
+      </tal:block>
+      <p tal:condition="python:type (tests) != type ([])" tal:content="tests"/>
     </tal:block>
   </span>
 </tal:block>
