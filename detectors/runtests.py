@@ -136,6 +136,8 @@ def _check_location_values (db, c, nodeid, newvalues):
     url = newvalues.get ('url')
     if url == '' or (url is None and nodeid is None):
         raise Reject, "No URL given"
+    if url[:len ('http://')] != 'http://' and url[:len ('https://')] != 'https://':
+        raise Reject ('URL does not start with http:// nor https://')
 
 def _run_location_tests (db, c, nodeid, newvalues):
     url = newvalues.get ('url')
