@@ -1,4 +1,4 @@
-### misc.py --- Miscellaneous functions for use in page templates
+### user.py --- User detectors
 
 ## Copyright (C) 2005 Brailcom, o.p.s.
 ##
@@ -20,26 +20,32 @@
 ## this program; if not, write to the Free Software Foundation, Inc.,
 ## 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
-import os
-
 from roundup.configuration import UserConfig, Option
+
+import os
+import sys
 
 CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
                                       (Option, 'template', None, "WAassistant template to use when creating new projects")
                                       ),),)
 
-def supervisors (db):
-    users = []
-    for id in db.user.list ():
-        roles = db.user.get (id, 'roles').split (',')
-        if 'Supervisor' in roles:
-            users.append (db.user.get (id, 'username'))
-    return users
-    
-def wausers_home (db):
+def _react_registration (db, login, user, action):
     configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
-    return configuration.WAUSERS_HOME
-    
-def init (instance):
-    instance.registerUtil ('supervisors', supervisors)
-    instance.registerUtil ('wausers_home', wausers_home)
+    wausers_path = configuration.WAUSERS_HOME
+    if wausers_path and login not in ('admin', 'anonymous',):
+        if wausers_path not in sys.path:
+            sys.path.append (wausers_path)
+        import waauth
+        result = getattr (waauth, action) (db.config.TRACKER_NAME, login, user, configuration.WAUSERS_HOME)
+        if result:
+            raise Exception (result)
+
+def react_register_user (db, c, nodeid, olddata):
+    _react_registration (db, db.user.get (nodeid, 'username'), db.user.get (nodeid, 'wausername'), 'add_user')
+
+def react_unregister_user (db, c, nodeid, olddata):
+    _react_registration (db, olddata['username'], olddata['wausername'], 'remove_user')
+
+def init (db):
+    db.user.react ('create', react_register_user)
+    db.user.react ('retire', react_unregister_user)

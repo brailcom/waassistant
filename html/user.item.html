@@ -9,9 +9,16 @@
     <input type="hidden" name="@template" value="item">
     <label tal:omit-tag="not:context/realname/is_edit_ok">Name:<br><span tal:replace="structure context/realname/field"/></label><br>
     <label tal:omit-tag="not:context/username/is_edit_ok">Login name:<br><span tal:replace="structure context/username/field"/></label><br>
+    <tal:block tal:condition="python:request.user.username=='admin'" tal:omit-tag="true">
+      <label tal:condition="python:utils.wausers_home(db._db)">
+        WAusers name:<br><span tal:replace="structure context/wausername/field"/>
+      </label><br>
+    </tal:block>
     <tal:block tal:condition="context/is_edit_ok" tal:omit-tag="true">
-      <label>Password:<br><span tal:replace="structure context/password/field"/></label><br>
-      <label>Confirm password:<br><span tal:replace="structure context/password/confirm"/></label><br>
+      <tal:block tal:condition="python:not utils.wausers_home(db._db)" tal:omit-tag="true">
+        <label>Password:<br><span tal:replace="structure context/password/field"/></label><br>
+        <label>Confirm password:<br><span tal:replace="structure context/password/confirm"/></label><br>
+      </tal:block>
     </tal:block>
     <label>Roles<span tal:condition="context/roles/is_edit_ok"
                       tal:replace="string:(to give the user more than one role, enter a comma,separated,list)"/>:
