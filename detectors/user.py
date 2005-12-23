@@ -21,6 +21,7 @@
 ## 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 from roundup.configuration import UserConfig, Option
+from roundup.exceptions import Reject
 
 import os
 import sys
@@ -46,6 +47,21 @@ def react_register_user (db, c, nodeid, olddata):
 def react_unregister_user (db, c, nodeid, olddata):
     _react_registration (db, olddata['username'], olddata['wausername'], 'remove_user')
 
+def audit_register_user (db, c, nodeid, newvalues):
+    configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
+    wausers_path = configuration.WAUSERS_HOME
+    if wausers_path:
+        if not nodeid and not newvalues.has_key ('wausername'):
+            raise Reject ("No WAusers name given")
+        if wausers_path not in sys.path:
+            sys.path.append (wausers_path)
+        import waauth
+        if newvalues.has_key ('wausername'):
+            if not waauth.check_user (newvalues['wausername'], configuration.WAUSERS_HOME):
+                raise Reject ("WAusers name `%s' does not exist" % (newvalues['wausername'],))
+
 def init (db):
+    db.user.audit ('create', audit_register_user)
+    db.user.audit ('set', audit_register_user)
     db.user.react ('create', react_register_user)
     db.user.react ('retire', react_unregister_user)
