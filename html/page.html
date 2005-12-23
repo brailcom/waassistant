@@ -2,7 +2,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>WAssistant -- <span metal:define-slot="title">title</span></title>
+<title>WAssistant -- <span tal:replace="db/config/TRACKER_NAME"/> -- <span metal:define-slot="title">title</span></title>
 <meta http-equiv="Content-Type" tal:attributes="content string:text/html;; charset=${request/client/charset}">
 </head>
 <body>
@@ -47,7 +47,7 @@
     </tal:block>
   </tal:block>
   <tal:block tal:condition="python:request.user.username!='anonymous'">
-    [<a tal:attributes="href python:request.indexargs_url('home', {'@action':'logout'})">Log Out <span tal:replace="request/user/username"/></a>]
+    [<a tal:attributes="href python:request.indexargs_url('home', {'@action':'logout'})">Log Out <span tal:replace="string:${request/user/username}@${db/config/TRACKER_NAME}"/></a>]
   </tal:block>
   </p>
 </map>
