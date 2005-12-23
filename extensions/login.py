@@ -27,7 +27,6 @@ import roundup.cgi.actions
 from roundup.configuration import UserConfig, Option
 
 CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
-                                      (Option, 'template', None, "WAassistant template to use when creating new projects")
                                       ),),)
 
 class Login_Action (roundup.cgi.actions.LoginAction):

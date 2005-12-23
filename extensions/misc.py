@@ -25,7 +25,6 @@ import os
 from roundup.configuration import UserConfig, CoreConfig, Option
 
 CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
-                                      (Option, 'template', None, "WAassistant template to use when creating new projects")
                                       ),),)
 
 def supervisors (db):

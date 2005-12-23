@@ -27,7 +27,6 @@ import os
 import sys
 
 CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
-                                      (Option, 'template', None, "WAassistant template to use when creating new projects")
                                       ),),)
 
 def _react_registration (db, login, user, action):
