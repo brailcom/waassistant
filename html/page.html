@@ -39,7 +39,12 @@
   [<a href="@@file/doc/index.html">WAassistant Manual</a>]
   <!-- Log in / log out -->
   <tal:block tal:condition="python:request.user.username=='anonymous'">
-    [<a href="home">Log In</a>]
+    <tal:block tal:condition="python:utils.wausers_home(db._db)">
+      [<a tal:attributes="href python:utils.wausers_path(db._db)">Your Projects</a>]
+    </tal:block>
+    <tal:block tal:condition="python:not utils.wausers_home(db._db)">
+      [<a href="home">Log In</a>]
+    </tal:block>
   </tal:block>
   <tal:block tal:condition="python:request.user.username!='anonymous'">
     [<a tal:attributes="href python:request.indexargs_url('home', {'@action':'logout'})">Log Out <span tal:replace="request/user/username"/></a>]

@@ -2,7 +2,9 @@
   <tal:block metal:fill-slot="title" tal:omit-tag="true">
     <span tal:define="itemkind request/form/index/value | string:welcome;" tal:omit-tag="true">
       <span tal:condition="python:itemkind == 'welcome'" tal:omit-tag="true">
-        <span tal:condition="python:request.user.username == 'anonymous'" tal:replace="string:Log In"/>
+        <tal:block tal:condition="python:not utils.wausers_home(db._db)">
+          <span tal:condition="python:request.user.username == 'anonymous'" tal:replace="string:Log In"/>
+        </tal:block>
         <span tal:condition="python:request.user.username != 'anonymous'" tal:replace="string:Checkpoints"/>
       </span>
       <span tal:condition="python:itemkind != 'welcome'" tal:replace="python:itemkind.capitalize () + 's'"/>
@@ -14,7 +16,7 @@
       <!-- Welcome page -->
       <tal:block tal:condition="python:itemkind == 'welcome' and request.user.username == 'anonymous'">
         <tal:block tal:condition="python:utils.wausers_home(db._db)">
-          <a tal:attributes="href python:utils.wausers_path(db._db)">Your projects</a>
+          <a tal:attributes="href python:utils.wausers_path(db._db)">Back to the list of your projects</a>
         </tal:block>
         <tal:block tal:condition="python:not utils.wausers_home(db._db)">
           <p>
