@@ -52,7 +52,8 @@ def audit_register_user (db, c, nodeid, newvalues):
     wausers_path = configuration.WAUSERS_HOME
     if wausers_path:
         if not nodeid and not newvalues.has_key ('wausername'):
-            raise Reject ("No WAusers name given")
+            if newvalues.get ('username') not in ('admin', 'anonymous',):
+                raise Reject ("No WAusers name given")
         if wausers_path not in sys.path:
             sys.path.append (wausers_path)
         import waauth
