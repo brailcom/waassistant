@@ -22,7 +22,7 @@
 
 import os
 
-from roundup.configuration import UserConfig, Option
+from roundup.configuration import UserConfig, CoreConfig, Option
 
 CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
                                       (Option, 'template', None, "WAassistant template to use when creating new projects")
@@ -35,11 +35,20 @@ def supervisors (db):
         if 'Supervisor' in roles:
             users.append (db.user.get (id, 'username'))
     return users
-    
+
 def wausers_home (db):
     configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
     return configuration.WAUSERS_HOME
+
+def wausers_path (db):
+    configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
+    home = configuration.WAUSERS_HOME
+    if not home:
+        return ''
+    configuration = CoreConfig (home)
+    return configuration.TRACKER_WEB
     
 def init (instance):
     instance.registerUtil ('supervisors', supervisors)
     instance.registerUtil ('wausers_home', wausers_home)
+    instance.registerUtil ('wausers_path', wausers_path)
