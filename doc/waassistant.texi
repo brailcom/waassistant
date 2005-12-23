@@ -86,12 +86,15 @@ making comprehensive reports on accessibility properties of Web sites.
 
 @cindex Roundup
 @cindex WAchecker
+@cindex WAusers
 It is implemented on top of @uref{http://roundup.sf.net,Roundup}, a
 flexible issue tracking system, and
 @uref{http://www.freebsoft.org/wahelper,WAchecker}, a Python library
 performing automated tests of Web accessibility.  It is intended to be
 free, accessible itself and to utilize an extensible tool for
-automated testing.
+automated testing.  It can be also configured to run as a public
+services, with the help of the
+@uref{http://www.freebsoft.org/wahelper,WAusers} tool.
 
 We believe an advanced free Web accessibility testing tool is needed
 to improve overall accessibility of Web sites.  WAassistant features
@@ -521,13 +524,43 @@ the @code{Subscribers:} field.
 
 WAassistant is a regular Roundup application.  Refer to Roundup
 configuration, customization and design documentation to learn how to
-customize Roundup applications including WAassistant.  Up to now,
-there is nothing special in WAassistant necessary to explain here.
+customize Roundup applications including WAassistant.
 
-Please note that WAassistant and WAchecker are projects that have just
-started.  We hope they will help to improve accessibility of Web sites
-to handicapped users and perhaps also to users not using just one
-particular browser at a given resolution.  We will welcome if
+@cindex WAusers
+@cindex authentication
+There is one special feature about WAassistant.  For the purpose of
+authenticating users you can use either standard Roundup login
+mechanism or authentication through the
+@uref{http://www.freebsoft.org/wahelper,WAusers} application.  The
+latter case has the following features:
+
+@itemize @bullet
+@item
+Users are authenticated through a WAusers tracker instead of passwords
+stored in the local tracker database.
+
+@item
+@cindex @file{configwa.ini}
+To enable external authentication set the @samp{home} configuration
+option in the file @file{configwa.ini} to the path of your WAusers
+tracker.  For instance, if you installed a WAusers tracker to
+@var{/some/directory}, replace the line @samp{home =} with @samp{home
+= @var{/some/directory}} in @file{configwa.ini}.
+
+@item
+With WAusers authentication enabled in @file{configwa.ini} the user
+editing form contains WAusers user name field instead of the password
+field.  You authorize the given WAusers user to access the tracker
+under the given local user name.
+
+@item
+For more details about WAusers refer to the WAusers manual.
+@end itemize
+
+Please note that WAassistant, WAchecker and WAusers are projects that
+have just started.  We hope they will help to improve accessibility of
+Web sites to handicapped users and perhaps also to users not using
+just one particular browser at a given resolution.  We will welcome if
 WAassistant and WAchecker become growing collaborative projects so
 don't hesitate to contribute your improvements and suggestions, see
 @ref{Contact Information}.
