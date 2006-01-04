@@ -35,6 +35,9 @@ def supervisors (db):
             users.append (db.user.get (id, 'username'))
     return users
 
+def current_role (db, userid):
+    return db.user.get (userid, 'roles')
+
 def wausers_home (db):
     configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
     return configuration.WAUSERS_HOME
@@ -49,5 +52,6 @@ def wausers_path (db):
     
 def init (instance):
     instance.registerUtil ('supervisors', supervisors)
+    instance.registerUtil ('current_role', current_role)
     instance.registerUtil ('wausers_home', wausers_home)
     instance.registerUtil ('wausers_path', wausers_path)

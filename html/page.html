@@ -39,7 +39,7 @@
   [<a href="@@file/doc/index.html">WAassistant Manual</a>]
   <!-- Role -->
   <tal:block tal:condition="python:request.user.username!='anonymous' and len(db._db.user.get(request.user.id,'allroles').split(','))>1">
-    [<a href="home?@template=role">Change <span tal:content="python:db._db.user.get(request.user.id,'roles')"/> Role</a>]
+    [<a href="home?@template=role">Change <span tal:content="python:utils.current_role(db._db,request.user.id)"/> Role</a>]
   </tal:block>
   <!-- Log in / log out -->
   <tal:block tal:condition="python:request.user.username=='anonymous'">
@@ -51,7 +51,10 @@
     </tal:block>
   </tal:block>
   <tal:block tal:condition="python:request.user.username!='anonymous'">
-    [<a tal:attributes="href python:request.indexargs_url('home', {'@action':'logout'})">Log Out <span tal:replace="string:${request/user/username}@${db/config/TRACKER_NAME}"/></a>]
+    <tal:block tal:define="username python:db._db.user.get(request.user.id,'username')">
+      <!-- The line above is necessary because of `User' access rights. -->
+      [<a tal:attributes="href python:request.indexargs_url('home', {'@action':'logout'})">Log Out <span tal:replace="string:${username}@${db/config/TRACKER_NAME}"/></a>]
+    </tal:block>
   </tal:block>
   </p>
 </map>

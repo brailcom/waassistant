@@ -5,7 +5,10 @@
         <tal:block tal:condition="python:not utils.wausers_home(db._db)">
           <span tal:condition="python:request.user.username == 'anonymous'" tal:replace="string:Log In"/>
         </tal:block>
-        <span tal:condition="python:request.user.username != 'anonymous'" tal:replace="string:Checkpoints"/>
+        <tal:block tal:condition="python:request.user.username != 'anonymous'">
+          <tal:block tal:condition="db/checkpoint/is_view_ok" tal:replace="string:Checkpoints"/>
+          <tal:block tal:condition="not:db/checkpoint/is_view_ok" tal:replace="string:Welcome"/>
+        </tal:block>
       </span>
       <span tal:condition="python:itemkind != 'welcome'" tal:replace="python:itemkind.capitalize () + 's'"/>
     </span>
@@ -48,7 +51,11 @@
 
       <!-- Standard page -->
       <tal:block tal:condition="python:itemkind != 'welcome' or request.user.username != 'anonymous'">
-        <tal:block tal:define="itemkind request/form/index/value | string:checkpoint">
+        <p tal:condition="not:db/checkpoint/is_view_ok">
+          Please select one of the menu links above.
+        </p>
+        <tal:block tal:define="itemkind request/form/index/value | string:checkpoint"
+                   tal:condition="db/checkpoint/is_view_ok">
           <em tal:condition="python:request.user.username == 'admin' and itemkind != 'user'">
             Don't edit these items as admin unless you have good reasons to do so.
             Prefer making changes as a regular user.
