@@ -1,6 +1,6 @@
 ### login.py --- External authentication
 
-## Copyright (C) 2005 Brailcom, o.p.s.
+## Copyright (C) 2005, 2006 Brailcom, o.p.s.
 ##
 ## Author: Milan Zamazal <pdm@brailcom.org>
 ##
@@ -24,6 +24,7 @@ import os
 import sys
 
 import roundup.cgi.actions
+import roundup.cgi.exceptions
 from roundup.configuration import UserConfig, Option
 
 CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
@@ -47,5 +48,21 @@ class Login_Action (roundup.cgi.actions.LoginAction):
             return roundup.cgi.actions.LoginAction.verifyPassword (self, userid, password)
 
 
+class Chgrp_Action (roundup.cgi.actions.Action):
+
+    def handle (self):
+        try:
+            role = self.form.getfirst ('role')
+        except:
+            role = None
+        userid = self.userid
+        db = self.db
+        if role not in db.user.get (userid, 'allroles'):
+            raise roundup.cgi.exceptions.Unauthorised ()
+        db.user.set (userid, roles=role)
+        db.commit ()
+        self.client.ok_message.append ("Role changed")
+
 def init (instance):
     instance.registerAction ('login', Login_Action)
+    instance.registerAction ('chgrp', Chgrp_Action)

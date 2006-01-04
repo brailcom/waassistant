@@ -37,6 +37,10 @@
   </tal:block>
   <!-- Documentation -->
   [<a href="@@file/doc/index.html">WAassistant Manual</a>]
+  <!-- Role -->
+  <tal:block tal:condition="python:request.user.username!='anonymous' and len(db._db.user.get(request.user.id,'allroles').split(','))>1">
+    [<a href="home?@template=role">Change <span tal:content="python:db._db.user.get(request.user.id,'roles')"/> Role</a>]
+  </tal:block>
   <!-- Log in / log out -->
   <tal:block tal:condition="python:request.user.username=='anonymous'">
     <tal:block tal:condition="python:utils.wausers_home(db._db)">

@@ -22,8 +22,8 @@
 
 # System default users
 user = db.getclass ('user')
-user.create (username='admin', password=adminpw,
-             address=admin_email, roles='Admin')
+user.create (username='admin', password=adminpw, address=admin_email,
+             roles='Admin', allroles='Admin,Supervisor,Tester,User')
 user.create (username='anonymous', roles='Anonymous')
 
 # Issue statuses and kinds

@@ -20,11 +20,11 @@
         <label>Confirm password:<br><span tal:replace="structure context/password/confirm"/></label><br>
       </tal:block>
     </tal:block>
-    <label>Roles<span tal:condition="context/roles/is_edit_ok"
+    <label>Roles<span tal:condition="context/allroles/is_edit_ok"
                       tal:replace="string:(to give the user more than one role, enter a comma,separated,list)"/>:
       <br>
-      <span tal:condition="context/id" tal:replace="structure context/roles/field"/>
-      <input name="roles" tal:condition="not:context/id" tal:attributes="value db/config/NEW_WEB_USER_ROLES">
+      <span tal:condition="context/id" tal:replace="structure context/allroles/field"/>
+      <input name="allroles" tal:condition="not:context/id" tal:attributes="value db/config/NEW_WEB_USER_ROLES">
     </label><br>
     <label tal:omit-tag="not:context/phone/is_edit_ok">Phone:<br><span tal:replace="structure context/phone/field"/></label><br>
     <label tal:omit-tag="not:context/organisation/is_edit_ok">Organization:<br><span tal:replace="structure context/organisation/field"/></label><br>

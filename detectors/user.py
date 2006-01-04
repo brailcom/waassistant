@@ -1,6 +1,6 @@
 ### user.py --- User detectors
 
-## Copyright (C) 2005 Brailcom, o.p.s.
+## Copyright (C) 2005, 2006 Brailcom, o.p.s.
 ##
 ## Author: Milan Zamazal <pdm@brailcom.org>
 ##
@@ -60,8 +60,24 @@ def audit_register_user (db, c, nodeid, newvalues):
             if not waauth.check_user (newvalues['wausername'], configuration.WAUSERS_HOME):
                 raise Reject ("WAusers name `%s' does not exist" % (newvalues['wausername'],))
 
+def audit_update_roles (db, c, nodeid, newvalues):
+    if newvalues.has_key ('allroles'):
+        all_roles = newvalues['allroles'].split (',')
+        roles = newvalues.get ('roles')
+        if not roles:
+            if nodeid:
+                roles = c.get (nodeid, 'roles')
+        if roles not in all_roles:
+            if all_roles:
+                roles = all_roles[0]
+            else:
+                roles = ''
+        newvalues['roles'] = roles
+
 def init (db):
     db.user.audit ('create', audit_register_user)
     db.user.audit ('set', audit_register_user)
     db.user.react ('create', react_register_user)
     db.user.react ('retire', react_unregister_user)
+    db.user.audit ('create', audit_update_roles)
+    db.user.audit ('set', audit_update_roles)

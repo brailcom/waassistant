@@ -7,7 +7,7 @@
 @copying
 This manual is for WAassistant, @value{VERSION}.
 
-Copyright @copyright{} 2005 Brailcom, o.p.s.
+Copyright @copyright{} 2005, 2006 Brailcom, o.p.s.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -173,6 +173,7 @@ important checkpoints and stages of the WAchecker's testing process.
 * Testers::                     
 * Final Report::                
 * Sending Messages::            
+* Changing Role::               
 @end menu
 
 @node Usage Basics, Creating Users, Testing Web Accessibility, Testing Web Accessibility
@@ -266,6 +267,10 @@ So the first step which should be done in new WAassistant tracker is
 to log in as @samp{admin} and create new users.  At least one
 Supervisor user must be created before @emph{Create Users} checkpoint
 can be set to @code{done}.
+
+You can assign multiple roles to a user.  Then the user is allowed to
+choose his current role to one of the given set roles, @ref{Changing
+Role}.
 
 @cindex security
 The security mechanism used in WAassistant is the standard Roundup
@@ -506,7 +511,7 @@ And finally provide recommendations how to cure the problems and how
 to avoid them in future.
 @end itemize
 
-@node Sending Messages,  , Final Report, Testing Web Accessibility
+@node Sending Messages, Changing Role, Final Report, Testing Web Accessibility
 @section Sending Messages
 
 Some of the WAassistant pages allow you to append messages to items
@@ -515,6 +520,14 @@ and send them to other users.  Look for the fields labeled
 related item, which are all Supervisors, the creator of the item, the
 user currently responsible for the item, and other users mentioned in
 the @code{Subscribers:} field.
+
+@node Changing Role,  , Sending Messages, Testing Web Accessibility
+@section Changing Role
+
+If multiple roles are assigned to a user account, then the user can
+switch among the assigned roles any time using the @samp{[Change
+Role]} menu item.  This is useful if someone wants to use a single
+WAassistant account to work under multiple roles.
 
 @c ****************************************************************************
 

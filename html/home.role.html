@@ -1,0 +1,14 @@
+<tal:block metal:use-macro="templates/page/macros/icing">
+  <span metal:fill-slot="title" tal:omit-tag="true">Change Current Role</span>
+  <span metal:fill-slot="content" tal:omit-tag="true">
+    <tal:block tal:repeat="i python:db._db.user.get(request.user.id,'allroles').split(',')">
+      <form method="POST" action="home" tal:condition="python:i!=db._db.user.get(request.user.id,'roles')">
+        <p>
+          <input type="hidden" name="@action" value="chgrp"/>
+          <input type="submit" name="role" tal:attributes="value i"/>
+        </p>
+      </form>
+    </tal:block>
+  </span>
+</tal:block>
+

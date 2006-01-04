@@ -173,7 +173,8 @@ user = Class (db, 'user',
               phone=String (),
               organisation=String (),
               alternate_addresses=String (),
-              roles=String (),  # comma-separated string of Role names
+              roles=String (),
+              allroles=String (),
               timezone=String (),
               )
 user.setkey ('username')
