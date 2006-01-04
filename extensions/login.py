@@ -44,7 +44,7 @@ class Login_Action (roundup.cgi.actions.LoginAction):
                 sys.path.append (wausers_home)
             return self._verify_external_password (userid, password, wausers_home)
         else:
-            return roundup.action.Login_Action.verifyPassword (self, userid, password)
+            return roundup.cgi.actions.LoginAction.verifyPassword (self, userid, password)
 
 
 def init (instance):

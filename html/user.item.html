@@ -9,8 +9,8 @@
     <input type="hidden" name="@template" value="item">
     <label tal:omit-tag="not:context/realname/is_edit_ok">Name:<br><span tal:replace="structure context/realname/field"/></label><br>
     <label tal:omit-tag="not:context/username/is_edit_ok">Login name:<br><span tal:replace="structure context/username/field"/></label><br>
-    <tal:block tal:condition="python:request.user.username=='admin'" tal:omit-tag="true">
-      <label tal:condition="python:utils.wausers_home(db._db)">
+    <tal:block tal:condition="python:request.user.username=='admin' and utils.wausers_home(db._db)" tal:omit-tag="true">
+      <label>
         WAusers name:<br><span tal:replace="structure context/wausername/field"/>
       </label><br>
     </tal:block>
