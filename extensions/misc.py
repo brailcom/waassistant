@@ -1,6 +1,6 @@
 ### misc.py --- Miscellaneous functions for use in page templates
 
-## Copyright (C) 2005 Brailcom, o.p.s.
+## Copyright (C) 2005, 2006 Brailcom, o.p.s.
 ##
 ## Author: Milan Zamazal <pdm@brailcom.org>
 ##
@@ -30,8 +30,8 @@ CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the
 def supervisors (db):
     users = []
     for id in db.user.list ():
-        roles = db.user.get (id, 'roles').split (',')
-        if 'Supervisor' in roles:
+        roles = db.user.get (id, 'allroles')
+        if roles and 'Supervisor' in roles.split (','):
             users.append (db.user.get (id, 'username'))
     return users
 
