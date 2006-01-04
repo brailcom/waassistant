@@ -56,7 +56,7 @@
         </p>
         <tal:block tal:define="itemkind request/form/index/value | string:checkpoint"
                    tal:condition="db/checkpoint/is_view_ok">
-          <em tal:condition="python:request.user.username == 'admin' and itemkind != 'user'">
+          <em tal:condition="python:utils.is_admin (db._db, request.user.username) and itemkind != 'user'">
             Don't edit these items as admin unless you have good reasons to do so.
             Prefer making changes as a regular user.
           </em>
