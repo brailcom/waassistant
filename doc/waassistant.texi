@@ -567,6 +567,12 @@ field.  You authorize the given WAusers user to access the tracker
 under the given local user name.
 
 @item
+If configuration option @samp{same_login} in @file{configwa.ini} is
+set to @samp{yes}, local login names are the same as WAusers user
+names.  In this case no WAusers user name field is displayed in the
+user editing form, you only specify the single login name.
+
+@item
 For more details about WAusers refer to the WAusers manual.
 @end itemize
 

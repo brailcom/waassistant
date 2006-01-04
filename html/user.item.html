@@ -9,7 +9,7 @@
     <input type="hidden" name="@template" value="item">
     <label tal:omit-tag="not:context/realname/is_edit_ok">Name:<br><span tal:replace="structure context/realname/field"/></label><br>
     <label tal:omit-tag="not:context/username/is_edit_ok">Login name:<br><span tal:replace="structure context/username/field"/></label><br>
-    <tal:block tal:condition="python:utils.is_admin(db._db,request.user.username) and utils.wausers_home(db._db)" tal:omit-tag="true">
+    <tal:block tal:condition="python:utils.is_admin(db._db,request.user.username) and utils.wausers_home(db._db) and not utils.wausers_same_login(db._db)" tal:omit-tag="true">
       <label>
         WAusers name:<br><span tal:replace="structure context/wausername/field"/>
       </label><br>

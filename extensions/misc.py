@@ -25,6 +25,7 @@ import os
 from roundup.configuration import UserConfig, CoreConfig, Option
 
 CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
+                                      (Option, 'same_login', None, "If true, WAassistant user names are directly mapped to WAusers user names."),
                                       ),),)
 
 def supervisors (db):
@@ -53,6 +54,10 @@ def wausers_path (db):
         return ''
     configuration = CoreConfig (home)
     return configuration.TRACKER_WEB
+
+def wausers_same_login (db):
+    configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
+    return configuration.WAUSERS_SAME_LOGIN    
     
 def init (instance):
     instance.registerUtil ('supervisors', supervisors)
@@ -60,3 +65,4 @@ def init (instance):
     instance.registerUtil ('is_admin', is_admin)
     instance.registerUtil ('wausers_home', wausers_home)
     instance.registerUtil ('wausers_path', wausers_path)
+    instance.registerUtil ('wausers_same_login', wausers_same_login)
