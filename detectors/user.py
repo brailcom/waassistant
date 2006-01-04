@@ -61,6 +61,7 @@ def audit_register_user (db, c, nodeid, newvalues):
                 raise Reject ("WAusers name `%s' does not exist" % (newvalues['wausername'],))
 
 def audit_update_roles (db, c, nodeid, newvalues):
+    # Check roles
     if newvalues.has_key ('allroles'):
         all_roles = newvalues['allroles'].split (',')
         roles = newvalues.get ('roles')
@@ -73,6 +74,9 @@ def audit_update_roles (db, c, nodeid, newvalues):
             else:
                 roles = ''
         newvalues['roles'] = roles
+    # Check allroles
+    if not nodeid and newvalues.get ('allroles') is None:
+        allroles = ''
 
 def init (db):
     db.user.audit ('create', audit_register_user)
