@@ -44,7 +44,7 @@ def react_register_user (db, c, nodeid, olddata):
     _react_registration (db, db.user.get (nodeid, 'username'), db.user.get (nodeid, 'wausername'), 'add_user')
 
 def react_unregister_user (db, c, nodeid, olddata):
-    _react_registration (db, olddata['username'], olddata['wausername'], 'remove_user')
+    _react_registration (db, db.user.get (nodeid, 'username'), db.user.get (nodeid, 'wausername'), 'remove_user')
 
 def audit_register_user (db, c, nodeid, newvalues):
     configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
