@@ -1,4 +1,4 @@
-### login.py --- External authentication
+### login.py --- External authentication and other login actions
 
 ## Copyright (C) 2005, 2006 Brailcom, o.p.s.
 ##
@@ -26,9 +26,11 @@ import sys
 import roundup.cgi.actions
 import roundup.cgi.exceptions
 from roundup.configuration import UserConfig, Option
+import roundup.date
 
 CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
                                       ),),)
+
 
 class Login_Action (roundup.cgi.actions.LoginAction):
 
@@ -47,6 +49,26 @@ class Login_Action (roundup.cgi.actions.LoginAction):
         else:
             return roundup.cgi.actions.LoginAction.verifyPassword (self, userid, password)
 
+    def handle (self):
+        roundup.cgi.actions.LoginAction.handle (self)
+        self.client.opendb ('admin')
+        db = self.client.db
+        userclass = db.user
+        username = self.client.user
+        userid = userclass.lookup (username)
+        lastlogin = userclass.get (userid, 'lastlogin')
+        if not lastlogin:
+            configuration = UserConfig (os.path.join (os.path.dirname (self.db.dir), 'configwa.ini'))
+            wausers_home = configuration.WAUSERS_HOME
+            if wausers_home:
+                if wausers_home not in sys.path:
+                    sys.path.append (wausers_home)
+                import waauth
+                user_data = waauth.user_data (username, wausers_home)
+                userclass.set (userid, **user_data)
+        userclass.set (userid, lastlogin=roundup.date.Date ())
+        db.commit ()
+
 
 class Chgrp_Action (roundup.cgi.actions.Action):
 
@@ -63,6 +85,7 @@ class Chgrp_Action (roundup.cgi.actions.Action):
         db.commit ()
         self.client.ok_message.append ("Role changed")
 
+        
 def init (instance):
     instance.registerAction ('login', Login_Action)
     instance.registerAction ('chgrp', Chgrp_Action)

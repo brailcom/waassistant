@@ -1,6 +1,6 @@
 ### schema.py --- WAassistant database schema
 
-## Copyright (C) 2005 Brailcom, o.p.s.
+## Copyright (C) 2005, 2006 Brailcom, o.p.s.
 ##
 ## Author: Milan Zamazal <pdm@brailcom.org>
 ##
@@ -176,6 +176,7 @@ user = Class (db, 'user',
               roles=String (),
               allroles=String (),
               timezone=String (),
+              lastlogin=Date (),
               )
 user.setkey ('username')
 
@@ -251,7 +252,7 @@ db.security.addPermissionToRole ('Tester', 'Edit', classname='recommendation',
 # users -- edit
 db.security.addPermissionToRole ('Admin', 'Create', 'user')
 db.security.addPermissionToRole ('Admin', 'Edit', 'user')
-properties = ('password', 'address', 'realname', 'phone', 'alternate_addresses', 'timezone',)
+properties = ('password', 'address', 'realname', 'phone', 'alternate_addresses', 'timezone', 'lastlogin',)
 def permission_edit_user (db, userid, itemid):
     return userid == itemid
 db.security.addPermission (name='Edit', klass='user', properties=properties, check=permission_edit_user)
