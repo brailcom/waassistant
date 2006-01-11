@@ -1,7 +1,7 @@
 \input texinfo    @c -*-texinfo-*-
 @comment %**start of header
 @setfilename waassistant.info
-@set VERSION 0.2
+@set VERSION 0.3
 @settitle WAassistant @value{VERSION}
 @comment %**end of header
 @copying
