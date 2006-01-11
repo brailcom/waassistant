@@ -258,10 +258,12 @@ have also all the permissions of Testers, Users and Anonymous users.
 During WAassistant tracker setup in Roundup two users are
 automatically created: @samp{admin} (with the password given during
 the setup process) which is the system administrator power user, and
-@samp{anonymous} which represents a user who is not logged in.  Note
-you can't log in as @samp{anonymous} explicitly, you become
-@samp{anonymous} automatically each time you log out or before you log
-in.
+@samp{anonymous} which represents a user who is not logged in.  If
+your projects and users are managed with WAusers, the third user (the
+WAusers project creator) with administrator's privileges is
+additionally created.  Note you can't log in as @samp{anonymous}
+explicitly, you become @samp{anonymous} automatically each time you
+log out or before you log in.
 
 So the first step which should be done in new WAassistant tracker is
 to log in as @samp{admin} and create new users.  At least one
@@ -571,6 +573,11 @@ If configuration option @samp{same_login} in @file{configwa.ini} is
 set to @samp{yes}, local login names are the same as WAusers user
 names.  In this case no WAusers user name field is displayed in the
 user editing form, you only specify the single login name.
+
+@item
+When creating new users, the user editing form is reduced.  The other
+data are propagated from the WAuser's database when the created user
+logs into the project for the first time.
 
 @item
 For more details about WAusers refer to the WAusers manual.
