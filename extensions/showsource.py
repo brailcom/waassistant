@@ -1,6 +1,6 @@
 # showsource.py --- Show source page with a given place highlighted
 
-## Copyright (C) 2005 Brailcom, o.p.s.
+## Copyright (C) 2005, 2006 Brailcom, o.p.s.
 ##
 ## Author: Milan Zamazal <pdm@brailcom.org>
 ##
@@ -24,6 +24,7 @@ import cgi
 import string
 import sys
 
+import wachecker.charseq
 import wachecker.location
 
 def showsource (url, line, column):
@@ -38,8 +39,8 @@ def showsource (url, line, column):
     before_lines = source_lines[:row_] + [source_lines[row_][:col_]]
     after_lines = [source_lines[row_][col_:]] + source_lines[row_+1:]
     return ('<pre>%s</pre>\n<a name="point"><strong>***here***</strong></a>\n<pre>%s</pre>' %
-            (cgi.escape (string.join (before_lines, '')),
-             cgi.escape (string.join (after_lines, '')),)).encode ('utf-8')
+            (wachecker.charseq.str (cgi.escape (string.join (before_lines, ''))),
+             wachecker.charseq.str (cgi.escape (string.join (after_lines, ''))),))
 
 def init (instance):
     instance.registerUtil ('showsource', showsource)
