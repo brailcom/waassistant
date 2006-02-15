@@ -1,6 +1,6 @@
 ### runtests.py --- Running WAchecker tests when needed
 
-## Copyright (C) 2005 Brailcom, o.p.s.
+## Copyright (C) 2005, 2006 Brailcom, o.p.s.
 ##
 ## Author: Milan Zamazal <pdm@brailcom.org>
 ##
@@ -72,12 +72,6 @@ def _run_test (db, url, test, refresh=False):
         else:
             raise Reject, "Invalid issue kind", classification
         data = issue.data () or ''
-        if isinstance (data, unicode):
-            data = data.encode ('utf-8')
-        elif isinstance (data, str):
-            data = unicode (data, 'utf-8')
-        else:
-            data = str (data).encode ('utf-8')
         db.issue.create (title='',
                          description=issue.description (),
                          data=data,
