@@ -1,5 +1,5 @@
 <!-- Display issues without a test -->
-<span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':None, 'status': '3'})"/>
+<span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':None, 'status': '3'}, pagesize=1000)"/>
 <hr>
 <!-- Some Python programming in XML :-( -->
 <tal:block tal:define="active_testsets python:[id for id in db._db.testset.list () if db._db.testset.get (id, 'enabled')]">
@@ -19,7 +19,7 @@
           </tal:block>
         </p>
         <!-- Issue list -->
-        <span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':t.id, 'status':'3'})"/>
+        <span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':t.id, 'status':'3'}, pagesize=1000)"/>
         <hr>
       </tal:block>
     </tal:block>

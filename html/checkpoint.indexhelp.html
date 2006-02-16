@@ -4,4 +4,4 @@
   updated, thus guiding you to your next task.
 </p>
 
-<tal:block tal:replace="structure python:db.checkpoint.renderWith ('_indexhelp')"/>
+<tal:block tal:replace="structure python:db.checkpoint.renderWith ('_indexhelp', pagesize=1000)"/>

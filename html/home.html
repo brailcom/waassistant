@@ -61,7 +61,7 @@
             Prefer making changes as a regular user.
           </em>
           <tal:block tal:condition="python:itemkind != 'source'"
-                     tal:replace="structure python:getattr (db, itemkind).renderWith ('indexhelp')"/>
+                     tal:replace="structure python:getattr (db, itemkind).renderWith ('indexhelp', pagesize=1000)"/>
           <p tal:condition="python:itemkind not in ('testset', 'source',)">
             <a tal:attributes="href python:itemkind+'?@template=item';"
                tal:condition="python:request.user.hasPermission ('Create', itemkind)">[New <span tal:replace="python:itemkind.capitalize()"/>]</a>
@@ -69,7 +69,7 @@
 
           <hr>
           <span tal:condition="python:itemkind not in ('issue', 'source',)"
-                tal:replace="structure python:getattr(db,itemkind).renderWith('index')"/>
+                tal:replace="structure python:getattr(db,itemkind).renderWith('index', pagesize=1000)"/>
           <span tal:condition="python:itemkind == 'issue'"
                 tal:replace="structure python:db.test.renderWith('index', sort=('+', 'title',), pagesize=1000)"/>
           <span tal:condition="python:itemkind == 'source'"

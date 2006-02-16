@@ -149,7 +149,7 @@
 <tal:block tal:condition="python:itemkind == 'Test'">
   <hr>
   <p>Issues:</p>
-  <span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':context.id})"/>
+  <span tal:replace="structure python:db.issue.renderWith ('index', group=('+', 'description',), sort=('+', 'url',), filterspec={'test':context.id}, pagesize=1000)"/>
   <hr>
 </tal:block>
 <tal:block tal:condition="context/report/is_view_ok | false">

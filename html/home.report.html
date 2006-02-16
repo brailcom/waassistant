@@ -19,7 +19,7 @@
             </em>
           </p>
           <em>Warning: Preliminary Report not yet finished.</em>
-          <tal:block tal:replace="structure python:db.report.renderWith ('indexhelp')"/>
+          <tal:block tal:replace="structure python:db.report.renderWith ('indexhelp', pagesize=1000)"/>
         </tal:block>
 
         <h2>Summary of Identified Problems</h2>
@@ -37,7 +37,7 @@
             </em>
           </p>
           <p><em>Warning: Final Report not yet finished.</em></p>
-          <tal:block tal:replace="structure python:db.report.renderWith ('indexhelp')"/>
+          <tal:block tal:replace="structure python:db.report.renderWith ('indexhelp', pagesize=1000)"/>
         </tal:block>
 
         <h2><a tal:attributes="href string:report1" tal:omit-tag="not:db/report/is_edit_ok">Summary</a></h2>
@@ -64,11 +64,11 @@
 
         <h3>Overview of Identified Problems</h3>
         
-        <tal:block tal:replace="structure python:db.problem.renderWith ('sindex')"/>
+        <tal:block tal:replace="structure python:db.problem.renderWith ('sindex', pagesize=1000)"/>
 
         <h3>Description of Identified Problems</h3>
         
-        <tal:block tal:replace="structure python:db.problem.renderWith ('index')"/>
+        <tal:block tal:replace="structure python:db.problem.renderWith ('index', pagesize=1000)"/>
 
         <h2>Recommendations</h2>
 
@@ -76,7 +76,7 @@
           <a tal:attributes="href string:recommendation?@template=item">[New Recommendation]</a>
         </p>
 
-        <tal:block tal:replace="structure python:db.recommendation.renderWith ('index')"/>
+        <tal:block tal:replace="structure python:db.recommendation.renderWith ('index', pagesize=1000)"/>
 
         <h2>Appendix</h2>
 
@@ -88,7 +88,7 @@
 
         <a tal:attributes="href string:home?index=reference" tal:condition="db/reference/is_edit_ok">[Edit]</a>
 
-        <tal:block tal:replace="structure python:db.reference.renderWith ('sindex', sort=('+', 'order',))"/>
+        <tal:block tal:replace="structure python:db.reference.renderWith ('sindex', sort=('+', 'order',), pagesize=1000)"/>
         
       </tal:block>
     </tal:block>

@@ -2,6 +2,6 @@
   <tal:block metal:fill-slot="title" tal:omit-tag="true">Test Sets</tal:block>
   <tal:block metal:fill-slot="content" tal:omit-tag="true">
     <hr>
-    <span tal:replace="structure python:getattr (db, 'testset').renderWith ('index')"/>
+    <span tal:replace="structure python:getattr (db, 'testset').renderWith ('index', pagesize=1000)"/>
   </tal:block>
 </tal:block>
