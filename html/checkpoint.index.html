@@ -2,7 +2,7 @@
 
 <h3>Your Tasks</h3>
 <tal:block tal:repeat="i request/batch">
-  <tal:block tal:condition="python:str (i.status) not in ('inactive', 'done',) and i.is_edit_ok () and (utils.is_admin (db._db, request.user.username) or str (i.assignedto) == 'admin')">
+  <tal:block tal:condition="python:str (i.status) not in ('inactive', 'done',) and i.is_edit_ok () and (not utils.is_admin (db._db, request.user.username) or str (i.assignedto) == 'admin')">
     <p>
       <a tal:attributes="href string:checkpoint${i/id}"
          tal:content="python:i.title or 'untitled'"/>
