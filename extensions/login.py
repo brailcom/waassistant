@@ -22,13 +22,16 @@
 
 import os
 import sys
+import urllib
 
 import roundup.cgi.actions
+import roundup.cgi.client
 import roundup.cgi.exceptions
 from roundup.configuration import UserConfig, Option
 import roundup.date
 
-CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation"),
+CONFIGURATION_OPTIONS = (('wausers', ((Option, 'home', None, "Directory with the WAusers installation",),
+                                      (Option, 'auto_login', None, "Automatically login anonymous users",),
                                       ),),)
 
 
@@ -68,6 +71,13 @@ class Login_Action (roundup.cgi.actions.LoginAction):
                 userclass.set (userid, **user_data)
         userclass.set (userid, lastlogin=roundup.date.Date ())
         db.commit ()
+        # Redirection
+        try:
+            redirect = self.form['__login_redirect'].value
+        except:
+            redirect = None
+        if redirect:
+            raise roundup.cgi.exceptions.Redirect (redirect)
 
 
 class Chgrp_Action (roundup.cgi.actions.Action):
@@ -85,7 +95,25 @@ class Chgrp_Action (roundup.cgi.actions.Action):
         db.commit ()
         self.client.ok_message.append ("Role changed")
 
-        
+    
+def maybe_login (db, url):
+    configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
+    if configuration.WAUSERS_AUTO_LOGIN:
+        wausers_home = configuration.WAUSERS_HOME
+        if wausers_home:
+            if configuration.WAUSERS_SAME_LOGIN:
+                wu_configuration = UserConfig (os.path.join (wausers_home, 'config.ini'))
+                raise roundup.cgi.exceptions.Redirect (
+                    '%s?__login_redirect=%s&__login_project=%s' %
+                    (wu_configuration.TRACKER_WEB, urllib.quote_plus (url), db.config.TRACKER_NAME,))
+        else:
+            base_url = url[:url.rfind ('/')+1]
+            raise roundup.cgi.exceptions.Redirect ('%s?__login_redirect=%s' %
+                                                   (base_url, urllib.quote_plus (url),))
+    return ''
+
+
 def init (instance):
     instance.registerAction ('login', Login_Action)
     instance.registerAction ('chgrp', Chgrp_Action)
+    instance.registerUtil ('maybe_login', maybe_login)

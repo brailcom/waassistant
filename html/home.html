@@ -36,6 +36,8 @@
             <p>
               <label>Username:<br><input size="10" name="__login_name"></label><br>
               <label>Password:<br><input size="10" type="password" name="__login_password"></label><br>
+              <input tal:condition="request/form/__login_redirect/value | false"
+                     type="hidden" name="__login_redirect" value="request/form/__login_redirect/value">
               <input type="hidden" name="@action" value="Login">
             </p>
             <p>
@@ -52,6 +54,8 @@
       <!-- Standard page -->
       <tal:block tal:condition="python:itemkind != 'welcome' or request.user.username != 'anonymous'"
                  tal:define="itemkind request/form/index/value | string:checkpoint">
+        <tal:block tal:condition="python:request.user.username=='anonymous' and request.form['@action'].value!='logout'"
+                   tal:replace="python:utils.maybe_login(db._db,request.base)"/>
         <p tal:condition="python:itemkind=='checkpoint' and not db.checkpoint.is_view_ok()">
           Please select one of the menu links above.
         </p>

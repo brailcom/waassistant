@@ -575,6 +575,13 @@ names.  In this case no WAusers user name field is displayed in the
 user editing form, you only specify the single login name.
 
 @item
+If configuration option @samp{auto_login} in @file{configwa.ini} is
+set to @samp{yes}, WAassistant displays a login dialog (or asks
+WAusers to do so if @samp{home} is set) when an anonymous user tries
+to access a protected page.  This is useful to allow bookmarking of
+WAassistant pages.
+
+@item
 When creating new users, the user editing form is reduced.  The other
 data are propagated from the WAuser's database when the created user
 logs into the project for the first time.
