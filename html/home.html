@@ -54,7 +54,7 @@
       <!-- Standard page -->
       <tal:block tal:condition="python:itemkind != 'welcome' or request.user.username != 'anonymous'"
                  tal:define="itemkind request/form/index/value | string:checkpoint">
-        <tal:block tal:condition="python:request.user.username=='anonymous' and request.form['@action'].value!='logout'"
+        <tal:block tal:condition="python:request.user.username=='anonymous' and (not request.form.has_key('@action') or request.form['@action'].value!='logout')"
                    tal:replace="python:utils.maybe_login(db._db,request.base)"/>
         <p tal:condition="python:itemkind=='checkpoint' and not db.checkpoint.is_view_ok()">
           Please select one of the menu links above.
