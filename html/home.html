@@ -50,13 +50,13 @@
       </tal:block>
 
       <!-- Standard page -->
-      <tal:block tal:condition="python:itemkind != 'welcome' or request.user.username != 'anonymous'">
-        <p tal:condition="not:db/checkpoint/is_view_ok">
+      <tal:block tal:condition="python:itemkind != 'welcome' or request.user.username != 'anonymous'"
+                 tal:define="itemkind request/form/index/value | string:checkpoint">
+        <p tal:condition="python:itemkind=='checkpoint' and not db.checkpoint.is_view_ok()">
           Please select one of the menu links above.
         </p>
-        <tal:block tal:define="itemkind request/form/index/value | string:checkpoint"
-                   tal:condition="db/checkpoint/is_view_ok">
-          <em tal:condition="python:utils.is_admin (db._db, request.user.username) and itemkind != 'user'">
+        <tal:block tal:condition="python:itemkind!='checkpoint' or db.checkpoint.is_view_ok()">
+          <em tal:condition="python:utils.is_admin (db) and itemkind != 'user'">
             Don't edit these items as admin unless you have good reasons to do so.
             Prefer making changes as a regular user.
           </em>

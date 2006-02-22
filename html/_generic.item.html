@@ -191,7 +191,7 @@
 
 <form method="POST" enctype="multipart/form-data"
       tal:attributes="action context/designator"
-      tal:condition="python:context.id and context.is_edit_ok () and (itemkind in ('Task', 'Location', 'Problem', 'Recommendation', 'User',) or (itemkind == 'Checkpoint' and utils.is_admin (db._db, context.creator)) or (itemkind == 'Issue' and not context.generated))">
+      tal:condition="python:context.id and context.is_edit_ok () and (itemkind in ('Task', 'Location', 'Problem', 'Recommendation', 'User',) or (itemkind == 'Checkpoint' and utils.is_admin (db)) or (itemkind == 'Issue' and not context.generated))">
   <div>
     <input type="hidden" name="@action" value="retire">
     <input type="submit" name="submit" value="Delete Item" tal:condition="context/id">
@@ -228,7 +228,7 @@
 
 <!-- History -->
 
-<tal:block tal:condition="python:context.id and request.user.username != 'anonymous'" tal:replace="structure context/history"/>
+<tal:block tal:condition="python:context.id and request.user.roles not in ('Anonymous','User',)" tal:replace="structure context/history"/>
 
 </span>
 </tal:block>

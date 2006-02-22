@@ -39,9 +39,9 @@ def supervisors (db):
 def current_role (db, userid):
     return db.user.get (userid, 'roles')
 
-def is_admin (db, username):
-    userid = db.user.lookup (str (username))
-    return userid and current_role (db, userid) == 'Admin'
+def is_admin (db):
+    userid = db._db.getuid ()
+    return userid and current_role (db._db, userid) == 'Admin'
 
 def wausers_home (db):
     configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
