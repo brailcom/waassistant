@@ -8,7 +8,7 @@
   </span>
   <span metal:fill-slot="content" tal:omit-tag="true">
     <tal:block tal:condition="python:request.user.username=='anonymous'"
-               tal:replace="python:utils.maybe_login(db._db,request.base+'home?@template=report')"/>
+               tal:replace="python:utils.maybe_login(db._db,request)"/>
     
     <tal:block tal:define="stage2 python:db._db.checkpoint.filter (None, {'title': 'Resolve Issues', 'status': '2'})">
       

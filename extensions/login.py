@@ -96,10 +96,14 @@ class Chgrp_Action (roundup.cgi.actions.Action):
         self.client.ok_message.append ("Role changed")
 
     
-def maybe_login (db, url):
+def maybe_login (db, request):
     configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
     if configuration.WAUSERS_AUTO_LOGIN:
         wausers_home = configuration.WAUSERS_HOME
+        url = request.base
+        query = request.env.get ('QUERY_STRING')
+        if query:
+            url = url + '?' + query
         if wausers_home:
             if configuration.WAUSERS_SAME_LOGIN:
                 wu_configuration = UserConfig (os.path.join (wausers_home, 'config.ini'))
