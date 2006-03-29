@@ -10,7 +10,10 @@
     <tal:block tal:condition="python:not utils.wausers_home(db._db) or context.id and context.lastlogin">
       <label tal:omit-tag="not:context/realname/is_edit_ok">Name:<br><span tal:replace="structure context/realname/field"/></label><br>
     </tal:block>
-    <label tal:omit-tag="not:context/username/is_edit_ok">Login name:<br><span tal:replace="structure context/username/field"/></label><br>
+    <label tal:omit-tag="context/username">Login name:<br>
+      <span tal:condition="not:context/username" tal:replace="structure context/username/field"/>
+      <strong tal:condition="context/username"><code tal:content="structure context/username"/></strong>
+    </label><br>
     <tal:block tal:condition="python:utils.is_admin(db) and utils.wausers_home(db._db) and not utils.wausers_same_login(db._db)" tal:omit-tag="true">
       <label>
         WAusers name:<br><span tal:replace="structure context/wausername/field"/>
