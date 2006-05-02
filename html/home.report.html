@@ -43,7 +43,8 @@
           <tal:block tal:replace="structure python:db.report.renderWith ('indexhelp', pagesize=1000)"/>
         </tal:block>
 
-        <h2><a tal:attributes="href string:report1" tal:omit-tag="not:db/report/is_edit_ok">Summary</a></h2>
+        <h2><a tal:attributes="href string:report1"
+               tal:omit-tag="python:not db.report.is_edit_ok() and utils.current_role(db._db,request.user.id)!='Supervisor'">Summary</a></h2> <!-- is_edit_ok doesn't work well here -->
 
         <p tal:content="structure python:db._db.report.get ('1', 'description')"/>
 
