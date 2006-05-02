@@ -3,5 +3,6 @@
     <a tal:attributes="href string:#problem${i/id}" 
        tal:content="python:i.title or 'untitled'"/>
   </strong>
-  <p tal:content="i/summary"/>
+  <br>
+  <span tal:replace="i/summary"/>
 </p>
