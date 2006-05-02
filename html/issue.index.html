@@ -4,7 +4,7 @@
     <a tal:attributes="href string:issue${i/id}" tal:content="python:i.title or (i.generated and '(automatically generated)') or '(untitled)'"/>
     <br>
     <strong tal:content="i/status" tal:omit-tag="python:str (i.status) != 'unhandled'"/>
-    <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (i.line, i.column, i.url)"
+    <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s' % (i.line, i.column, utils.urlquote(str(i.url)+'#point'))"
        tal:content="python:str(i.line)+':'+str(i.column)"/>
     <a tal:attributes="href i/url" tal:content="i/url"/>
     <br>
@@ -22,7 +22,7 @@
           <span tal:replace="string:Issue#${j/id}"/>
           <a tal:attributes="href string:issue${j/id}"
              tal:content="python:i.title or (i.generated and '(automatically generated)') or '(untitled)'"/>
-          <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s#point' % (j.line, j.column, j.url)"
+          <a tal:attributes="href python:'home?index=source&line=%s&column=%s&url=%s' % (j.line, j.column, utils.urlquote(str(j.url)+'#point'))"
              tal:content="python:str(j.line)+':'+str(j.column)"/>
           <a tal:attributes="href j/url" tal:content="j/url"/>
           <em tal:content="j/data"/>

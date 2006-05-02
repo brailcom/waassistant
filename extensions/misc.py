@@ -21,6 +21,7 @@
 ## 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 import os
+import urllib
 
 from roundup.configuration import UserConfig, CoreConfig, Option
 
@@ -58,7 +59,10 @@ def wausers_path (db):
 def wausers_same_login (db):
     configuration = UserConfig (os.path.join (os.path.dirname (db.dir), 'configwa.ini'))
     return configuration.WAUSERS_SAME_LOGIN    
-    
+
+def urlquote (url):
+    return urllib.quote_plus (url)
+
 def init (instance):
     instance.registerUtil ('supervisors', supervisors)
     instance.registerUtil ('current_role', current_role)
@@ -66,3 +70,4 @@ def init (instance):
     instance.registerUtil ('wausers_home', wausers_home)
     instance.registerUtil ('wausers_path', wausers_path)
     instance.registerUtil ('wausers_same_login', wausers_same_login)
+    instance.registerUtil ('urlquote', urlquote)
