@@ -164,17 +164,19 @@
     <span tal:replace="structure context/report/multiline"/>
   </tal:block>
 </tal:block>
-<p tal:condition="context/messages/is_view_ok | false">
-  <label tal:omit-tag="not:context/messages/is_edit_ok">
-    Message:<br>
-    <textarea tal:content="request/form/@note/value | default" name="@note" rows="5" cols="80"/>
-  </label>
-  <br>
-  <label tal:omit-tag="not:context/nosy/is_edit_ok">
-    Subscribers:<br>
-    <span tal:replace="structure context/nosy/field"/>
-  </label>
-</p>
+<tal:block tal:condition="context/id" tal:omit-tag="true">
+  <p tal:condition="context/messages/is_view_ok | false">
+    <label tal:omit-tag="not:context/messages/is_edit_ok">
+      Message:<br>
+      <textarea tal:content="request/form/@note/value | default" name="@note" rows="5" cols="80"/>
+    </label>
+    <br>
+    <label tal:omit-tag="not:context/nosy/is_edit_ok">
+      Subscribers:<br>
+      <span tal:replace="structure context/nosy/field"/>
+    </label>
+  </p>
+</tal:block>
 <p tal:condition="context/rerun/is_edit_ok | false">
   <label tal:omit-tag="not:context/rerun/is_edit_ok">
     Rerun test (if yes, all changes to generated issues will be lost!):<br>

@@ -1,6 +1,6 @@
 ### mail.py --- E-mail sending reactors
 
-## Copyright (C) 2005 Brailcom, o.p.s.
+## Copyright (C) 2005, 2006 Brailcom, o.p.s.
 ##
 ## Author: Milan Zamazal <pdm@brailcom.org>
 ##
@@ -114,11 +114,18 @@ def audit_nosy (db, c, nodeid, newvalues):
     for mid in newvalues.get ('messages', []):
         if mid not in old_messages:
             if add_author:
-                id = db.msg.get (mid, 'author')
+                try:
+                    id = db.msg.get (mid, 'author')
+                except:
+                    id = None
                 if id and id not in nosylist:
                     nosylist.append (id)
             if add_recipients:
-                for id in (db.msg.get (id, 'recipients') or []):
+                try:
+                    recipients = db.msg.get (id, 'recipients')
+                except:
+                    recipients = []
+                for id in recipients:
                     if id not in nosylist:
                         nosylist.append (id)
     # Set the list
