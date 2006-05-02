@@ -145,7 +145,8 @@ checkpoint.setkey ('title')
 # Report
 report = Class (db, 'report',
                 title=String (),
-                description=String ()
+                description=String (),
+                intromessage=String ()
                 )
 report.setkey ('title')
 problem = IssueClass (db, 'problem',

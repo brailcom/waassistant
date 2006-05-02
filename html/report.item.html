@@ -1,0 +1,59 @@
+<tal:block metal:use-macro="templates/page/macros/icing">
+<span metal:fill-slot="title" tal:omit-tag="true">
+  <span tal:replace="python:context._classname.capitalize()"/> Detailed View
+  <span tal:condition="context/is_edit_ok" tal:replace="string:&amp; Editing"/>
+</span>
+<span metal:fill-slot="content" tal:omit-tag="true">
+
+<!-- Form setup -->
+
+<form method="POST" enctype="multipart/form-data"
+      tal:attributes="action context/designator">
+<div>
+  <input type="hidden" name="@template" value="item">
+</div>
+
+<!-- Fields -->
+
+<tal:block tal:define="stage2 python:db._db.checkpoint.filter (None, {'title': 'Resolve Issues', 'status': '2'})">
+  <tal:block tal:condition="stage2">
+    <tal:block tal:condition="context/description/is_view_ok | false">
+      <p tal:condition="context/description/is_edit_ok">
+        <label>
+          Description:<br>
+          <span tal:replace="structure context/description/multiline"/>
+        </label>
+      </p>
+      <tal:block tal:condition="not:context/description/is_edit_ok">
+        <p>Description:</p>
+        <span tal:replace="structure context/description/multiline"/>
+      </tal:block>
+    </tal:block>
+  </tal:block>
+  <tal:block tal:condition="not:stage2">
+    <tal:block tal:condition="context/intromessage/is_view_ok | false">
+      <p tal:condition="context/intromessage/is_edit_ok">
+        <label>
+          Introductory message:<br>
+          <span tal:replace="structure context/intromessage/multiline"/>
+        </label>
+      </p>
+      <tal:block tal:condition="not:context/intromessage/is_edit_ok">
+        <p>Introductory message:</p>
+        <span tal:replace="structure context/intromessage/multiline"/>
+      </tal:block>
+    </tal:block>
+  </tal:block>
+</tal:block>
+
+<!-- Submit button -->
+
+<p tal:content="structure context/submit" tal:condition="context/is_edit_ok"/>
+</form>
+
+<!-- History -->
+
+<tal:block tal:condition="python:context.id and request.user.roles not in ('Anonymous','User',)" tal:replace="structure context/history"/>
+
+</span>
+</tal:block>

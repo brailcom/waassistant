@@ -22,8 +22,13 @@
             </em>
           </p>
           <em>Warning: Preliminary Report not yet finished.</em>
+
           <tal:block tal:replace="structure python:db.report.renderWith ('indexhelp', pagesize=1000)"/>
+          
+          <h2><a tal:attributes="href string:report1">Introductory message to the client</a></h2>
         </tal:block>
+
+        <p tal:content="structure python:db._db.report.get ('1', 'intromessage')"/>
 
         <h2>Summary of Identified Problems</h2>
       
