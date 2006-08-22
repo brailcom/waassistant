@@ -30,17 +30,20 @@ import wachecker.location
 def showsource (url, line, column):
     if url is None:
         return 'No URL given'
-    row = line and int (line) or 0
+    row = line
     col = column and int (column) or 0
     location = wachecker.location.Location (url)
     source_lines = location.open ().readlines ()
-    row_ = max (row-1, 0)
+    row_ = max ((row or 0)-1, 0)
     col_ = max (col-1, 0)
     before_lines = source_lines[:row_] + [source_lines[row_][:col_]]
     after_lines = [source_lines[row_][col_:]] + source_lines[row_+1:]
-    return ('<pre>%s</pre>\n<a name="point"><strong>***here***</strong></a>\n<pre>%s</pre>' %
-            (wachecker.charseq.str (cgi.escape (string.join (before_lines, ''))),
-             wachecker.charseq.str (cgi.escape (string.join (after_lines, ''))),))
+    if row:
+        message = '<pre>%s</pre>\n<a name="point"><strong>***here***</strong></a>\n<pre>%s</pre>'
+    else:
+        message = '<pre>%s</pre>\n<em>The exact issue position in the page source is unspecified.</em>\n<pre>%s</pre>'
+    return (message % (wachecker.charseq.str (cgi.escape (string.join (before_lines, ''))),
+                       wachecker.charseq.str (cgi.escape (string.join (after_lines, ''))),))
 
 def init (instance):
     instance.registerUtil ('showsource', showsource)
